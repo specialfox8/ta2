@@ -10,7 +10,6 @@
 @endsection
 
 @section('content')
-    <!-- Main row -->
     <div class="row">
         <div class="col-md-12">
             <div class="box">
@@ -27,9 +26,6 @@
                             <th>Kategori</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
-                        <tbody>
-
-                        </tbody>
                     </table>
                 </div>
             </div>
