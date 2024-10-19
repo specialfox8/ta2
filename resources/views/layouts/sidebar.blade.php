@@ -42,6 +42,15 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('kategori.index') }}">
+                    <i class="fa fa-archive" aria-hidden="true"></i></i> <span>kategori</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">new</small>
+                    </span>
+                </a>
+            </li>
+            <li>
+            <li>
                 <a href="#">
                     <i class="fa fa-archive" aria-hidden="true"></i></i> <span>Persediaan</span>
                     <span class="pull-right-container">
