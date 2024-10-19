@@ -3,15 +3,14 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
+        {{-- <div class="user-panel">
             <div class="pull-left image">
                 <img src="{{ asset('Adminlte-2/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <span class="hidden-xs">{{ auth()->user()->name }}</span>
             </div>
-        </div>
+        </div> --}}
 
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -25,6 +24,7 @@
                 </a>
             </li>
             {{-- <li class="header">Master</li> --}}
+            <li class="header"></li>
             <li>
                 <a href="#">
                     <i class="fa fa-upload" aria-hidden="true"></i></i> <span>Penjualan</span>
@@ -41,6 +41,7 @@
                     </span>
                 </a>
             </li>
+            <li class="header"></li>
             <li>
                 <a href="{{ route('kategori.index') }}">
                     <i class="fa fa-archive" aria-hidden="true"></i></i> <span>kategori</span>
@@ -50,8 +51,7 @@
                 </a>
             </li>
             <li>
-            <li>
-                <a href="#">
+                <a href="{{ route('barang.index') }}">
                     <i class="fa fa-archive" aria-hidden="true"></i></i> <span>Persediaan</span>
                     <span class="pull-right-container">
                         <small class="label pull-right bg-green">new</small>
@@ -74,6 +74,7 @@
                     </span>
                 </a>
             </li>
+            <li class="header">Pembayaran</li>
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-usd" aria-hidden="true"></i></i> <span>Pembayaran</span>
@@ -87,6 +88,7 @@
 
                 </ul>
             </li>
+            <li class="header"></li>
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-file" aria-hidden="true"></i></i> <span>Laporan</span>
