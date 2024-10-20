@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\KonsumenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
     Route::resource('/barang', BarangController::class);
+
+    Route::get('/konsumen/data', [KonsumenController::class, 'data'])->name('konsumen.data');
+    Route::resource('/konsumen', KonsumenController::class);
 });

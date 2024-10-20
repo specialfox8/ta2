@@ -67,7 +67,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('konsumen.index') }}">
                     <i class="fa fa-users" aria-hidden="true"></i> <span>Konsumen</span>
                     <span class="pull-right-container">
                         <small class="label pull-right bg-green">new</small>
