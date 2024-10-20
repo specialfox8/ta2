@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KonsumenController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,4 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/konsumen/data', [KonsumenController::class, 'data'])->name('konsumen.data');
     Route::resource('/konsumen', KonsumenController::class);
+
+    Route::get('/supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
+    Route::resource('/supplier', SupplierController::class);
 });

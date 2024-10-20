@@ -59,7 +59,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('supplier.index') }}">
                     <i class="fa fa-industry" aria-hidden="true"></i></i> <span>Supplier</span>
                     <span class="pull-right-container">
                         <small class="label pull-right bg-green">new</small>
