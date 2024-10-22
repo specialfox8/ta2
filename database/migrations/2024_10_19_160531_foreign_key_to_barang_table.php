@@ -9,27 +9,29 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('barang', function (Blueprint $table) {
             // Tambahkan kolom jika belum ada
             if (!Schema::hasColumn('barang', 'id_kategori')) {
-                $table->unsignedInteger('id_kategori');
+                $table->unsignedInteger('id_kategori')
+                    ->after('id_barang');
             }
-
-            // Definisikan foreign key
             $table->foreign('id_kategori')
                 ->references('id_kategori')
                 ->on('kategori')
                 ->onUpdate('restrict')
                 ->onDelete('restrict');
+
+            // Definisikan foreign key
+
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::table('barang', function (Blueprint $table) {
             $table->integer('id_kategori')->change();

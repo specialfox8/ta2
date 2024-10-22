@@ -23,6 +23,8 @@
                     <table class="table table-stiped table-border">
                         <thead>
                             <th width="5%">No</th>
+
+                            <th>Kode barang</th>
                             <th>Nama Barang</th>
                             <th>Kategori</th>
                             <th>Harga</th>
@@ -51,24 +53,24 @@
                     url: '{{ route('barang.data') }}',
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        searchable: false,
-                        sortable: false
-                    },
-                    {
-                        data: 'nama_barang'
-                    },
-                    {
-                        data: 'harga'
-                    }, {
-                        data: 'jumlah'
-                    },
-                    {
-                        data: 'aksi',
-                        searchable: false,
-                        sortable: false
-                    }
-                ]
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    sortable: false
+                }, {
+                    data: 'kode_barang'
+                }, {
+                    data: 'nama_barang'
+                }, {
+                    data: 'nama_kategori'
+                }, {
+                    data: 'harga'
+                }, {
+                    data: 'jumlah'
+                }, {
+                    data: 'aksi',
+                    searchable: false,
+                    sortable: false
+                }, ],
             });
             $('#modal-form').validator().on('submit', function(e) {
                 if (!e.preventDefault()) {

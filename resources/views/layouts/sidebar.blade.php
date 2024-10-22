@@ -34,7 +34,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('pembelian.index') }}">
                     <i class="fa fa-download" aria-hidden="true"></i></i> <span>Pembelian</span>
                     <span class="pull-right-container">
                         <small class="label pull-right bg-green">new</small>

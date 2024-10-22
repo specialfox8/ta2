@@ -2,6 +2,7 @@
 
 function format_uang($angka)
 {
+    // return number_format($angka, 0, ',', '.');
     return number_format($angka, 0, ',', '.');
 }
 

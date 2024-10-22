@@ -19,11 +19,18 @@ class BarangController extends Controller
 
     public function data()
     {
-        $barang = Barang::orderBy('id_barang', 'desc')->get();
+        // $barang = Barang::orderBy('id_barang', 'desc')->get();
+        $barang = Barang::leftJoin('kategori', 'kategori.id_kategori', 'barang.id_kategori')
+            ->select('barang.*', 'nama_kategori')
+            // ->orderBy('kode_produk', 'asc')
+            ->get();
 
         return datatables()
             ->of($barang)
             ->addIndexColumn()
+            ->addColumn('kode_barang', function ($barang) {
+                return '<span class="label label-success">' . $barang->kode_barang . '</span>';
+            })
             ->addColumn('harga', function ($barang) {
                 return format_uang($barang->harga);
             })
@@ -38,7 +45,7 @@ class BarangController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'kode_barang'])
             ->make(true);
     }
 
@@ -55,8 +62,15 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        // $barang = Barang::latest()->first();
-        // $request['kode'] = 'B' . tambah_nol_kode($barang->id, 6);
+        $barang = Barang::latest()->first() ?? new Barang();
+        $request['kode_barang'] = 'B' . tambah_nol_kode((int)$barang->id_barang + 1, 3);
+
+        // Check if $barang exists, if not set the kode_barang to a default value
+        // $kode_barang = $barang ? tambah_nol_kode($barang->id, 3) : '001';
+
+        // Add the kode_barang to the request
+        // $request['kode_barang'] = 'B' . $kode_barang;
+
         $barang = Barang::create($request->all());
 
         return response()->json('Data Berhasil Disimpan', 200);
