@@ -29,8 +29,8 @@ class PembelianController extends Controller
             ->addColumn('total_item', function ($pembelian) {
                 return format_uang($pembelian->total_item);
             })
-            ->addColumn('nama_barang', function ($pembelian) {
-                return 'Rp.' . format_uang($pembelian->nama_barang);
+            ->addColumn('total_harga', function ($pembelian) {
+                return 'Rp.' . format_uang($pembelian->total_harga);
             })
             ->addColumn('bayar', function ($pembelian) {
                 return 'Rp.' . format_uang($pembelian->bayar);
@@ -38,8 +38,11 @@ class PembelianController extends Controller
             ->addColumn('tanggal', function ($pembelian) {
                 return tanggal_indonesia($pembelian->created_at, false);
             })
-            ->addColumn('supplier', function ($pembelianl) {
-                return $pembelianl->supplier->nama;
+            ->addColumn('supplier', function ($pembelian) {
+                return $pembelian->supplier->nama;
+            })
+            ->editColumn('diskon', function ($pembelian) {
+                return $pembelian->diskon . '%';
             })
             ->addColumn('aksi', function ($pembelian) {
                 return '
