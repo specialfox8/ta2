@@ -21,31 +21,31 @@ class PembelianController extends Controller
 
     public function data()
     {
-        $detil = Pembelian::orderBy('id_pembelian', 'desc')->get();
+        $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
 
         return datatables()
-            ->of($detil)
+            ->of($pembelian)
             ->addIndexColumn()
-            ->addColumn('total_item', function ($detil) {
-                return format_uang($detil->total_item);
+            ->addColumn('total_item', function ($pembelian) {
+                return format_uang($pembelian->total_item);
             })
-            ->addColumn('nama_barang', function ($detil) {
-                return 'Rp.' . format_uang($detil->nama_barang);
+            ->addColumn('nama_barang', function ($pembelian) {
+                return 'Rp.' . format_uang($pembelian->nama_barang);
             })
-            ->addColumn('bayar', function ($detil) {
-                return 'Rp.' . format_uang($detil->bayar);
+            ->addColumn('bayar', function ($pembelian) {
+                return 'Rp.' . format_uang($pembelian->bayar);
             })
-            ->addColumn('tanggal', function ($detil) {
-                return tanggal_indonesia($detil->created_at, false);
+            ->addColumn('tanggal', function ($pembelian) {
+                return tanggal_indonesia($pembelian->created_at, false);
             })
-            ->addColumn('supplier', function ($detil) {
-                return $detil->supplier->nama;
+            ->addColumn('supplier', function ($pembelianl) {
+                return $pembelianl->supplier->nama;
             })
-            ->addColumn('aksi', function ($detil) {
+            ->addColumn('aksi', function ($pembelian) {
                 return '
                 <div class="btn-group">
-                <button onclick="showDetail(`' . route('pembelian.show', $detil->id_pembelian) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                <button onclick="deleteData(`' . route('pembelian.destroy', $detil->id_pembelian) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                <button onclick="showDetail(`' . route('pembelian.show', $pembelian->id_pembelian) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                <button onclick="deleteData(`' . route('pembelian.destroy', $pembelian->id_pembelian) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
@@ -61,7 +61,7 @@ class PembelianController extends Controller
         $detil = new Pembelian();
         $detil->id_supplier = $id;
         $detil->total_item = 0;
-        $detil->nama_barang = 0;
+        $detil->total_harga = 0;
         $detil->diskon = 0;
         $detil->bayar = 0;
         $detil->save();
@@ -76,7 +76,7 @@ class PembelianController extends Controller
     {
         $detil = Pembelian::find($request->id_pembelian);
         $detil->total_item = $request->total_item;
-        $detil->nama_barang = $request->total;
+        $detil->total_harga = $request->total;
         $detil->diskon = $request->diskon;
         $detil->bayar = $request->bayar;
         $detil->update();
@@ -103,7 +103,7 @@ class PembelianController extends Controller
                 return '<span class="label label-success">' . $detil->barang->kode_barang . '</span>';
             })
             ->addColumn('nama_barang', function ($detil) {
-                return $detil->nama_barang;
+                return $detil->barang->nama_barang;
             })
             ->addColumn('harga', function ($detil) {
                 return 'Rp.' . format_uang($detil->harga);

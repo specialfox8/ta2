@@ -84,6 +84,7 @@
             });
 
             $('.table-supplier').DataTable();
+
             table2 = $('.table-detail').DataTable({
                 processing: true,
                 bSort: false,
