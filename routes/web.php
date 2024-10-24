@@ -63,7 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan_detail/{Sid}/data', [PenjualanDetilController::class, 'data'])->name('penjualan_detail.data');
     Route::get('/penjualan_detail/loadform/{diskon}/{total}', [PenjualanDetilController::class, 'loadForm'])->name('penjualan_detail.load.form');
     Route::delete('/penjualan_detail/{penjualan_detil}', [PenjualanDetilController::class, 'destroy'])->name('penjualan_detail.destroy');
-
     Route::resource('/penjualan_detail', PenjualanDetilController::class)
+        ->except('create', 'show', 'edit');
+
+    Route::resource('/laporan_penjualan', PenjualanController::class)
         ->except('create', 'show', 'edit');
 });

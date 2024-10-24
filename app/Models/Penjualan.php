@@ -13,7 +13,7 @@ class Penjualan extends Model
     protected $primaryKey = 'id_penjualan';
     protected $guarded = [];
 
-    public function supplier()
+    public function konsumen()
     {
         return $this->belongsTo(Konsumen::class, 'id_konsumen', 'id_konsumen');
     }

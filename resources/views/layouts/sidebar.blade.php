@@ -97,11 +97,14 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan1</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan2</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan3</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan4</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan5</a></li>
+                    <li class="active"><a href="{{ route('laporan_penjualan.index') }}"><i
+                                class="fa fa-circle-o"></i>Laporan Penjualan</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Pembelian</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Pembayaran Utang</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Pembayaran Piutang</a>
+                    </li>
+                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Persediaan Barang</a>
+                    </li>
                 </ul>
             </li>
         </ul>

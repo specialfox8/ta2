@@ -35,12 +35,12 @@ class PenjualanController extends Controller
             ->addColumn('tanggal', function ($penjualan) {
                 return tanggal_indonesia($penjualan->created_at, false);
             })
-            // ->addColumn('konsumen', function ($penjualan) {
-            //     return $penjualan->konsumen->nama;
-            // })
-            ->addColumn('konsumen', function ($penjualan) {
-                return $penjualan->konsumen ? $penjualan->konsumen->nama : 'Tidak ada Konsumen';
+            ->addColumn('konsumen', function ($pembelian) {
+                return $pembelian->konsumen->nama;
             })
+            // ->addColumn('konsumen', function ($penjualan) {
+            //     return $penjualan->konsumen ? $penjualan->konsumen->nama : 'Tidak ada Konsumen';
+            // })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
@@ -77,14 +77,14 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
-        $detil = Penjualan::find($request->id_penjualan);
-        $detil->total_item = $request->total_item;
-        $detil->total_harga = $request->total;
-        $detil->diskon = $request->diskon;
-        $detil->bayar = $request->bayar;
-        $detil->update();
+        $penjualan = Penjualan::find($request->id_penjualan);
+        $penjualan->total_item = $request->total_item;
+        $penjualan->total_harga = $request->total;
+        $penjualan->diskon = $request->diskon;
+        $penjualan->bayar = $request->bayar;
+        $penjualan->update();
 
-        $detil = PenjualanDetil::where('id_penjualan', $detil->id_penjualan)->get();
+        $detil = PenjualanDetil::where('id_penjualan', $penjualan->id_penjualan)->get();
 
         foreach ($detil as $item) {
             $barang = Barang::find($item->id_barang);

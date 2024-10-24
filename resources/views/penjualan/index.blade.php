@@ -27,7 +27,7 @@
                     <table class="table table-stiped table-border table-penjualan">
                         <thead>
                             <th width="5%">No</th>
-                            <th>Nama</th>
+                            <th>Nama supplier</th>
                             <th>Total Item</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
