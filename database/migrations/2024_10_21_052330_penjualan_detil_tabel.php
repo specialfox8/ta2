@@ -15,10 +15,9 @@ return new class extends Migration
         Schema::create('penjualan_detil', function (Blueprint $table) {
             $table->increments('id_penjualan_detil');
             $table->integer('id_penjualan');
-            $table->integer('id_produk');
+            $table->integer('id_barang');
             $table->integer('harga');
             $table->integer('jumlah');
-            $table->tinyInteger('diskon')->default(0);
             $table->integer('subtotal');
             $table->timestamps();
         });
