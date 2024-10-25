@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KonsumenController;
+use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembelianDetilController;
 use App\Http\Controllers\PenjualanController;
@@ -62,10 +63,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/penjualan_detail/{Sid}/data', [PenjualanDetilController::class, 'data'])->name('penjualan_detail.data');
     Route::get('/penjualan_detail/loadform/{diskon}/{total}', [PenjualanDetilController::class, 'loadForm'])->name('penjualan_detail.load.form');
-    Route::delete('/penjualan_detail/{penjualan_detil}', [PenjualanDetilController::class, 'destroy'])->name('penjualan_detail.destroy');
+    // Route::delete('/penjualan_detail/{penjualan_detil}', [PenjualanDetilController::class, 'destroy'])->name('penjualan_detail.destroy');
     Route::resource('/penjualan_detail', PenjualanDetilController::class)
         ->except('create', 'show', 'edit');
 
-    Route::resource('/laporan_penjualan', PenjualanController::class)
-        ->except('create', 'show', 'edit');
+    Route::get('/laporan_penjualan', [LaporanPenjualanController::class, 'index'])->name('laporan_penjualan.index');
+    Route::post('/laporan_penjualan/refresh', [LaporanPenjualanController::class, 'refresh'])->name('laporan_penjualan.refresh');
+    Route::get('/laporan_penjualan/data', [LaporanPenjualanController::class, 'data'])->name('laporan_penjualan.data');
+    Route::get('/laporan_penjualan/exportpdf', [LaporanPenjualanController::class, 'exportpdf'])->name('laporan_penjualan.exportpdf');
 });

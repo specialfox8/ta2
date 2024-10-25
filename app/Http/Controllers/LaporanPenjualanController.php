@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
-use App\Models\Konsumen;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetil;
+use PDF;
 use Illuminate\Http\Request;
 
-class PenjualanController extends Controller
+
+class LaporanPenjualanController extends Controller
 {
     public function index()
     {
-        $konsumen = Konsumen::orderBy('nama')->get();
-        return view('penjualan.index', compact('konsumen'));
+
+        $tanggalawal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        $tanggalakhir = date('Y-m-d');
+        return view('laporan_penjualan.index', compact('tanggalawal', 'tanggalakhir'));
     }
 
     public function data()
     {
+
         $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+
 
         return datatables()
             ->of($penjualan)
@@ -38,61 +42,18 @@ class PenjualanController extends Controller
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
             })
-            // ->addColumn('konsumen', function ($penjualan) {
-            //     return $penjualan->konsumen ? $penjualan->konsumen->nama : 'Tidak ada Konsumen';
-            // })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                <button onclick="showDetailPenjualan(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-                </div>
+                <button onclick="showLaporanPenjualan(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                        </div>
                 ';
             })
             ->rawColumns(['aksi'])
             ->make(true);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create($id)
-    {
-        $detil = new Penjualan();
-        $detil->id_konsumen = $id;
-        $detil->total_item = 0;
-        $detil->total_harga = 0;
-        $detil->diskon = 0;
-        $detil->bayar = 0;
-        $detil->save();
-
-        session(['id_penjualan' => $detil->id_penjualan]);
-        session(['id_konsumen' => $detil->id_konsumen]);
-
-        return redirect()->route('penjualan_detail.index');
-    }
-
-    public function store(Request $request)
-    {
-        $penjualan = Penjualan::find($request->id_penjualan);
-        $penjualan->total_item = $request->total_item;
-        $penjualan->total_harga = $request->total;
-        $penjualan->diskon = $request->diskon;
-        $penjualan->bayar = $request->bayar;
-        $penjualan->update();
-
-        $detil = PenjualanDetil::where('id_penjualan', $penjualan->id_penjualan)->get();
-
-        foreach ($detil as $item) {
-            $barang = Barang::find($item->id_barang);
-            $barang->jumlah -= $item->jumlah;
-            $barang->update();
-        }
-
-        return redirect()->route('penjualan.index');
     }
 
     public function show($id)
@@ -125,17 +86,16 @@ class PenjualanController extends Controller
             ->rawColumns(['kode_barang'])
             ->make(true);
     }
-
-    public function destroy($id)
+    public function exportpdf(Request $request)
     {
-        $penjualan = Penjualan::find($id);
-        $detil = PenjualanDetil::where('id_penjualan', $penjualan->id_penjualan)->get();
-        foreach ($detil as $item) {
-            $item->delete();
-        }
+        // Ambil data penjualan dari database
+        $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
 
-        $penjualan->delete();
+        // Render view menjadi PDF, misalnya 'laporan_penjualan.pdf'
+        // Pastikan view ini ada di resources/views/laporan_penjualan/pdf.blade.php
+        $pdf = PDF::loadView('laporan_penjualan.pdf', compact('penjualan'));
 
-        return response(null, 204);
+        // Tentukan nama file yang akan di-download dan kembalikan sebagai file PDF
+        return $pdf->download('laporan_penjualan_' . date('Ymd') . '.pdf');
     }
 }
