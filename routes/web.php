@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KonsumenController;
+use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembelianDetilController;
@@ -71,4 +72,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_penjualan/refresh', [LaporanPenjualanController::class, 'refresh'])->name('laporan_penjualan.refresh');
     Route::get('/laporan_penjualan/data', [LaporanPenjualanController::class, 'data'])->name('laporan_penjualan.data');
     Route::get('/laporan_penjualan/exportpdf', [LaporanPenjualanController::class, 'exportpdf'])->name('laporan_penjualan.exportpdf');
+
+    Route::get('/laporan_pembelian', [LaporanPembelianController::class, 'index'])->name('laporan_pembelian.index');
+    Route::post('/laporan_pembelian/refresh', [LaporanPembelianController::class, 'refresh'])->name('laporan_pembelian.refresh');
+    Route::get('/laporan_pembelian/data', [LaporanPembelianController::class, 'data'])->name('laporan_pembelian.data');
+    Route::get('/laporan_pembelian/exportpdf', [LaporanPembelianController::class, 'exportpdf'])->name('laporan_pembelian.exportpdf');
 });
