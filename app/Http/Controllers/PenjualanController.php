@@ -19,9 +19,14 @@ class PenjualanController extends Controller
     public function data()
     {
         $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+        // $detil
+        //     = PenjualanDetil::with('barang')
+        //     ->where('id_penjualan', $id)
+        //     ->get();
 
         return datatables()
             ->of($penjualan)
+            // ->of($detil)
             ->addIndexColumn()
             ->addColumn('total_item', function ($penjualan) {
                 return format_uang($penjualan->total_item);
@@ -38,8 +43,8 @@ class PenjualanController extends Controller
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
             })
-            // ->addColumn('konsumen', function ($penjualan) {
-            //     return $penjualan->konsumen ? $penjualan->konsumen->nama : 'Tidak ada Konsumen';
+            // ->addColumn('nama_barang', function ($detil) {
+            //     return $detil->barang->nama_barang;
             // })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
@@ -52,7 +57,7 @@ class PenjualanController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi',])
             ->make(true);
     }
 
@@ -124,6 +129,15 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['kode_barang'])
             ->make(true);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $penjualan = Penjualan::findOrFail($id);
+        $penjualan->status = $request->status;
+        $penjualan->save();
+
+        return redirect()->route('pembayaran_penjualan.index')->with('success', 'Status berhasil diperbarui');
     }
 
     public function destroy($id)

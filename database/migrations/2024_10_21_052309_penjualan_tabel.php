@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('total_harga');
             $table->tinyInteger('diskon')->default(0);
             $table->integer('bayar')->default(0);
+            $table->string('status')->default('belum lunas');
             $table->timestamps();
         });
     }

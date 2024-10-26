@@ -84,7 +84,8 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Utang</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Piutang</a></li>
+                    <li class="active"><a href="{{ route('pembayaran_penjualan.index') }}"><i
+                                class="fa fa-circle-o"></i>Piutang</a></li>
 
                 </ul>
             </li>

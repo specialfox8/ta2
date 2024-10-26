@@ -1,19 +1,19 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Penjualan
+    Pembayaran Penjualan
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Penjualan</li>
+    <li class="active">Pembayaran Penjualan</li>
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box">
-                <div class="box-header with-border">
+                {{-- <div class="box-header with-border">
                     <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
                         Transaksi Baru</button>
                     @empty(!session('id_penjualan'))
@@ -21,19 +21,19 @@
                             <i class="fa fa-edit"></i>
                             Transaksi Aktif</a>
                     @endempty
-                </div>
+                </div> --}}
                 <!-- /.box-header -->
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-border table-penjualan">
                         <thead>
                             <th width="5%">No</th>
                             <th>Nama supplier</th>
-                            {{-- <th>Nama barang</th> --}}
                             <th>Total Item</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Penjualan</th>
+                            <th>Status</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
@@ -57,7 +57,7 @@
                 processing: true,
                 dom: 'Brt',
                 ajax: {
-                    url: '{{ route('penjualan.data') }}',
+                    url: '{{ route('pembayaran_penjualan.data') }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -67,9 +67,6 @@
                     {
                         data: 'konsumen'
                     },
-                    // {
-                    //     data: 'nama_barang'
-                    // },
                     {
                         data: 'total_item'
                     }, {
@@ -78,8 +75,14 @@
                         data: 'diskon'
                     }, {
                         data: 'bayar'
-                    }, {
+                    },
+                    {
                         data: 'tanggal'
+                    },
+                    {
+                        data: 'status',
+                        searchable: false,
+                        sortable: false
                     },
                     {
                         data: 'aksi',

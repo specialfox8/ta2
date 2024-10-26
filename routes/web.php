@@ -5,6 +5,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KonsumenController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
+use App\Http\Controllers\PembayaranPiutangController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembelianDetilController;
 use App\Http\Controllers\PenjualanController;
@@ -64,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/penjualan_detail/{Sid}/data', [PenjualanDetilController::class, 'data'])->name('penjualan_detail.data');
     Route::get('/penjualan_detail/loadform/{diskon}/{total}', [PenjualanDetilController::class, 'loadForm'])->name('penjualan_detail.load.form');
-    // Route::delete('/penjualan_detail/{penjualan_detil}', [PenjualanDetilController::class, 'destroy'])->name('penjualan_detail.destroy');
+
     Route::resource('/penjualan_detail', PenjualanDetilController::class)
         ->except('create', 'show', 'edit');
 
@@ -77,4 +78,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_pembelian/refresh', [LaporanPembelianController::class, 'refresh'])->name('laporan_pembelian.refresh');
     Route::get('/laporan_pembelian/data', [LaporanPembelianController::class, 'data'])->name('laporan_pembelian.data');
     Route::get('/laporan_pembelian/exportpdf', [LaporanPembelianController::class, 'exportpdf'])->name('laporan_pembelian.exportpdf');
+
+
+    // Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
+    // Route::get('/penjualan/{id}/create', [PenjualanController::class, 'create'])->name('penjualan.create');
+    Route::get('pembayaran_penjualan/data', [PembayaranPiutangController::class, 'data'])->name('pembayaran_penjualan.data');
+    Route::put('pembayaran_penjualan/{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_penjualan.updateStatus');
+    Route::resource('/pembayaran_penjualan', PembayaranPiutangController::class)
+        ->except('create');
 });

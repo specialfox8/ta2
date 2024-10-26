@@ -125,6 +125,7 @@ class PembelianController extends Controller
             ->rawColumns(['kode_barang'])
             ->make(true);
     }
+    public function update() {}
 
     public function destroy($id)
     {

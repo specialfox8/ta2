@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('barang', function (Blueprint $table) {
-            // Tambahkan kolom jika belum ada
+
             if (!Schema::hasColumn('barang', 'id_kategori')) {
                 $table->unsignedInteger('id_kategori')
                     ->after('id_barang');
@@ -22,9 +22,6 @@ return new class extends Migration
                 ->on('kategori')
                 ->onUpdate('restrict')
                 ->onDelete('restrict');
-
-            // Definisikan foreign key
-
         });
     }
 

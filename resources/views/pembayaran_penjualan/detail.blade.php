@@ -15,7 +15,7 @@
                             <th>Nama Barang</th>
                             <th>Harga</th>
                             <th>Jumlah</th>
-                            <th>Total Harga</th>
+                            <th>Subtotal</th>
                         </thead>
 
                     </table>
