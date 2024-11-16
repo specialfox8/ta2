@@ -15,7 +15,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <a href="#">
+                <a href="{{ route('dashboard') }}">
                     <i class="fa fa-home" aria-hidden="true"></i></i> <span>Home</span>
                 </a>
             </li>
