@@ -5,7 +5,7 @@
         <!-- /.login-logo -->
         <div class="login-box-body">
             <div class="login-logo">
-                <a href="{{ url('/') }}"><b>Admin</b>LTE</a>
+                <a href="{{ url('/') }}"><b>CV. Gloria Felkent Jaya</a>
             </div>
 
             <form action="{{ route('login') }}" method="post">
