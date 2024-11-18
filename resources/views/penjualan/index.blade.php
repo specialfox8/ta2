@@ -27,9 +27,9 @@
                     <table class="table table-stiped table-border table-penjualan">
                         <thead>
                             <th width="5%">No</th>
+                            <th>Kode penjualan</th>
                             <th>Nama supplier</th>
                             {{-- <th>Nama barang</th> --}}
-                            <th>Total Item</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -65,14 +65,15 @@
                         sortable: false
                     },
                     {
+                        data: 'kode_penjualan'
+                    },
+                    {
                         data: 'konsumen'
                     },
                     // {
                     //     data: 'nama_barang'
                     // },
                     {
-                        data: 'total_item'
-                    }, {
                         data: 'total_harga'
                     }, {
                         data: 'diskon'

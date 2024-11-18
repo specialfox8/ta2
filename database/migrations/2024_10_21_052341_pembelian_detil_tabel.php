@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_pembelian_detil');
             $table->integer('id_pembelian');
             $table->integer('id_barang');
-            $table->integer('harga');
+            $table->integer('harga_beli');
             $table->integer('jumlah');
             $table->integer('subtotal');
             $table->timestamps();

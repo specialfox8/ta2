@@ -15,7 +15,8 @@ return new class extends Migration
             $table->increments('id_barang');
             $table->string('nama_barang');
             $table->integer('jumlah');
-            $table->integer('harga');
+            $table->integer('harga_beli');
+            $table->integer('harga_jual');
             $table->timestamps();
         });
     }

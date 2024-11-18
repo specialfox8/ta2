@@ -27,8 +27,9 @@
                     <table class="table table-stiped table-border table-pembelian">
                         <thead>
                             <th width="5%">No</th>
+                            <th>Kode penjualan</th>
                             <th>Nama Supplier</th>
-                            <th>Total Item</th>
+
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -65,7 +66,7 @@
                     }, {
                         data: 'supplier'
                     }, {
-                        data: 'total_item'
+                        data: 'kode_pembelian'
                     }, {
                         data: 'total_harga'
                     }, {

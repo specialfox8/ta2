@@ -86,4 +86,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('pembayaran_penjualan/{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_penjualan.updateStatus');
     Route::resource('/pembayaran_penjualan', PembayaranPiutangController::class)
         ->except('create');
+
+    Route::get('pembayaran_pembelian/data', [PembayaranPiutangController::class, 'data'])->name('pembayaran_pembelian.data');
+    Route::put('pembayaran_pembelian//{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_pembelian.updateStatus');
+    Route::resource('/pembayaran_pembelian', PembayaranPiutangController::class)
+        ->except('create');
 });

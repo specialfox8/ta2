@@ -56,7 +56,8 @@
                             <i class="fa fa-circle-o"></i>Penjualan</a></i></li>
 
 
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Utang</a></li>
+                    <li class="active"><a href="{{ route('pembayaran_pembelian.index') }}"><i
+                                class="fa fa-circle-o"></i>Utang</a></li>
                     <li class="active"><a href="{{ route('pembayaran_penjualan.index') }}"><i
                                 class="fa fa-circle-o"></i>Piutang</a></li>
 
