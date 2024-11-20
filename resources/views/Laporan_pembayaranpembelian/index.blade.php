@@ -1,7 +1,8 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pembelian {{ tanggal_indonesia($tanggalawal, false) }} s/d {{ tanggal_indonesia($tanggalakhir, false) }}
+    Laporan Pembayaran Pembelian {{ tanggal_indonesia($tanggalawal, false) }} s/d
+    {{ tanggal_indonesia($tanggalakhir, false) }}
 @endsection
 
 @push('css')
@@ -11,7 +12,7 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporan Pembelian</li>
+    <li class="active">Laporan Pembayaran Pembelian</li>
 @endsection
 
 @section('content')
@@ -23,7 +24,7 @@
                         <i></i> Ganti Tanggal
                     </button> --}}
 
-                    <a href="{{ route('laporan_pembelian.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
+                    <a href="{{ route('laporan_pembayaranpembelian.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
                         class="btn btn-info btn-flat btn-xs">
                         <i class="fa fa-plus-circle"></i> Export PDF
                     </a>
@@ -33,7 +34,7 @@
                         <thead>
                             <th width="5%">No</th>
                             <th>Kode Pembelian</th>
-                            <th>Nama supplier</th>
+                            <th>Nama Supplier</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -49,8 +50,8 @@
     </div>
 @endsection
 
-@includeIf('laporan_pembelian.form')
-@includeIf('laporan_pembelian.detail')
+@includeIf('laporan_pembayaranpembelian.form')
+@includeIf('laporan_pembayaranpembelian.detail')
 
 
 @push('scripts')

@@ -1,7 +1,8 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pembelian {{ tanggal_indonesia($tanggalawal, false) }} s/d {{ tanggal_indonesia($tanggalakhir, false) }}
+    Laporan Pembayaran Penjualan {{ tanggal_indonesia($tanggalawal, false) }} s/d
+    {{ tanggal_indonesia($tanggalakhir, false) }}
 @endsection
 
 @push('css')
@@ -11,7 +12,7 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporan Pembelian</li>
+    <li class="active">Laporan Pembayaran Penjualan</li>
 @endsection
 
 @section('content')
@@ -23,16 +24,16 @@
                         <i></i> Ganti Tanggal
                     </button> --}}
 
-                    <a href="{{ route('laporan_pembelian.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
+                    <a href="{{ route('laporan_penjualan.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
                         class="btn btn-info btn-flat btn-xs">
                         <i class="fa fa-plus-circle"></i> Export PDF
                     </a>
                 </div>
                 <div class="box-body table-responsive">
-                    <table class="table table-striped table-bordered table-laporan-pembelian">
+                    <table class="table table-striped table-bordered table-laporan-penjualan">
                         <thead>
                             <th width="5%">No</th>
-                            <th>Kode Pembelian</th>
+                            <th>Kode Penjualan</th>
                             <th>Nama supplier</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
@@ -49,8 +50,8 @@
     </div>
 @endsection
 
-@includeIf('laporan_pembelian.form')
-@includeIf('laporan_pembelian.detail')
+@includeIf('laporan_penjualan.form')
+@includeIf('laporan_penjualan.detail')
 
 
 @push('scripts')
@@ -60,11 +61,11 @@
         let table, table2;
 
         $(function() {
-            table = $('.table-laporan-pembelian').DataTable({
+            table = $('.table-laporan-penjualan').DataTable({
                 processing: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('laporan_pembelian.data') }}',
+                    url: '{{ route('laporan_penjualan.data') }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -72,10 +73,10 @@
                         sortable: false
                     },
                     {
-                        data: 'kode_pembelian'
+                        data: 'kode_penjualan'
                     },
                     {
-                        data: 'supplier'
+                        data: 'konsumen'
                     },
                     {
                         data: 'total_harga'
@@ -116,8 +117,8 @@
         });
 
 
-        function showLaporanPembelian(url) {
-            $('#modal-laporan-pembelian').modal('show');
+        function showLaporanPenjualan(url) {
+            $('#modal-laporan-penjualan').modal('show');
             table2.ajax.url(url);
             table2.ajax.reload();
         }

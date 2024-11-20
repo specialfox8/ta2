@@ -32,8 +32,8 @@
                     <table class="table table-striped table-bordered table-laporan-penjualan">
                         <thead>
                             <th width="5%">No</th>
+                            <th>Kode Penjualan</th>
                             <th>Nama supplier</th>
-                            <th>Total Item</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -72,11 +72,12 @@
                         sortable: false
                     },
                     {
+                        data: 'kode_penjualan'
+                    },
+                    {
                         data: 'konsumen'
                     },
                     {
-                        data: 'total_item'
-                    }, {
                         data: 'total_harga'
                     }, {
                         data: 'diskon'

@@ -3,6 +3,8 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KonsumenController;
+use App\Http\Controllers\LaporanPembayaranPembelianController;
+use App\Http\Controllers\LaporanPembayaranPenjualanController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\PembayaranPiutangController;
@@ -91,4 +93,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('pembayaran_pembelian//{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_pembelian.updateStatus');
     Route::resource('/pembayaran_pembelian', PembayaranPiutangController::class)
         ->except('create');
+
+    Route::get('/laporan_pembayaranpembelian', [LaporanPembayaranPembelianController::class, 'index'])->name('laporan_pembayaranpembelian.index');
+    Route::post('/laporan_pembayaranpembelian/refresh', [LaporanPembayaranPembelianController::class, 'refresh'])->name('laporan_pembayaranpembelian.refresh');
+    Route::get('/laporan_pembayaranpembelian/data', [LaporanPembayaranPembelianController::class, 'data'])->name('laporan_pembayaranpembelian.data');
+    Route::get('/laporan_pembayaranpembelian/exportpdf', [LaporanPembayaranPembelianController::class, 'exportpdf'])->name('laporan_pembayaranpembelian.exportpdf');
+
+    Route::get('/laporan_pembayaranpenjualan', [LaporanPembayaranPenjualanController::class, 'index'])->name('laporan_pembayaranpenjualan.index');
+    Route::post('/laporan_pembayaranpenjualan/refresh', [LaporanPembayaranPenjualanController::class, 'refresh'])->name('laporan_pembayaranpenjualan.refresh');
+    Route::get('/laporan_pembayaranpenjualan/data', [LaporanPembayaranPenjualanController::class, 'data'])->name('laporan_pembayaranpenjualan.data');
+    Route::get('/laporan_pembayaranpenjualan/exportpdf', [LaporanPembayaranPenjualanController::class, 'exportpdf'])->name('laporan_pembayaranpenjualan.exportpdf');
 });

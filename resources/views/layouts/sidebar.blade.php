@@ -76,8 +76,10 @@
                                 class="fa fa-circle-o"></i>Laporan Penjualan</a></li>
                     <li class="active"><a href="{{ route('laporan_pembelian.index') }}"><i
                                 class="fa fa-circle-o"></i>Laporan Pembelian</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Pembayaran Utang</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Pembayaran Piutang</a>
+                    <li class="active"><a href="{{ route('laporan_pembayaranpembelian.index') }}"><i
+                                class="fa fa-circle-o"></i>Laporan Pembayaran Utang</a></li>
+                    <li class="active"><a href="{{ route('laporan_pembayaranpenjualan.index') }}"><i
+                                class="fa fa-circle-o"></i>Laporan Pembayaran Piutang</a>
                     </li>
                     <li class="active"><a href="#"><i class="fa fa-circle-o"></i>Laporan Persediaan Barang</a>
                     </li>
