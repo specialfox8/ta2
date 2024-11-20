@@ -7,6 +7,7 @@ use App\Http\Controllers\LaporanPembayaranPembelianController;
 use App\Http\Controllers\LaporanPembayaranPenjualanController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
+use App\Http\Controllers\LaporanPersediaanController;
 use App\Http\Controllers\PembayaranPiutangController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembelianDetilController;
@@ -103,4 +104,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_pembayaranpenjualan/refresh', [LaporanPembayaranPenjualanController::class, 'refresh'])->name('laporan_pembayaranpenjualan.refresh');
     Route::get('/laporan_pembayaranpenjualan/data', [LaporanPembayaranPenjualanController::class, 'data'])->name('laporan_pembayaranpenjualan.data');
     Route::get('/laporan_pembayaranpenjualan/exportpdf', [LaporanPembayaranPenjualanController::class, 'exportpdf'])->name('laporan_pembayaranpenjualan.exportpdf');
+
+    Route::get('/laporan_persediaan', [LaporanPersediaanController::class, 'index'])->name('laporan_persediaan.index');
+    Route::get('/laporan_persediaan/data', [LaporanPersediaanController::class, 'data'])->name('laporan_persediaan.data');
+    Route::get('/laporan_persediaan/exportpdf', [LaporanPersediaanController::class, 'exportpdf'])->name('laporan_persediaan.exportpdf');
 });

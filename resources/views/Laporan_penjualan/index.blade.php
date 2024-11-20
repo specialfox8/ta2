@@ -19,10 +19,6 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header with-border">
-                    {{-- <button onclick="updatePeriode()" class="btn btn-success btn-xs btn-flat">
-                        <i></i> Ganti Tanggal
-                    </button> --}}
-
                     <a href="{{ route('laporan_penjualan.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
                         class="btn btn-info btn-flat btn-xs">
                         <i class="fa fa-plus-circle"></i> Export PDF

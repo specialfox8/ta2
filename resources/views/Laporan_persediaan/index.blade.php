@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Barang
+    Laporan Daftar Barang
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Barang</li>
+    <li class="active">Laporan Daftar Barang</li>
 @endsection
 
 @section('content')
@@ -14,23 +14,20 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <button onclick="addForm('{{ route('barang.store') }}')" class="btn btn-success btn-xs btn-flat"><i
-                            class="fa fa-plus-circle"></i>
-                        Tambah</button>
+                    <a href="{{ route('laporan_persediaan.exportpdf') }}" class="btn btn-info btn-flat btn-xs">
+                        <i class="fa fa-plus-circle"></i> Export PDF
+                    </a>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-border">
                         <thead>
                             <th width="5%">No</th>
-
                             <th>Kode barang</th>
                             <th>Nama Barang</th>
                             <th>Kategori</th>
                             <th>Harga Beli</th>
                             <th>Harga Jual</th>
-                            <th>Jumlah</th>
-                            <th width="15%"><i class="fa fa-cog"></i></th>
+                            <th>Stok</th>
                         </thead>
                     </table>
                 </div>
@@ -40,8 +37,6 @@
         <!-- /.col -->
     </div>
     <!-- /.row (main row) -->
-
-    @includeIf('barang.form')
 @endsection
 @push('scripts')
     <script>
@@ -64,16 +59,12 @@
                     }, {
                         data: 'nama_kategori'
                     }, {
-                        data: 'harga_beli'
+                        data: 'harga_jual'
                     },
                     {
-                        data: 'harga_jual'
+                        data: 'harga_beli'
                     }, {
                         data: 'jumlah'
-                    }, {
-                        data: 'aksi',
-                        searchable: false,
-                        sortable: false
                     },
                 ],
             });
@@ -119,8 +110,7 @@
                 .done((response) => {
                     $('#modal-form [name=nama_barang]').val(response.nama_barang);
                     $('#modal-form [name=id_kategori]').val(response.id_kategori);
-                    $('#modal-form [name=harga_beli]').val(response.harga_beli);
-                    $('#modal-form [name=harga_jual]').val(response.harga_jual);
+                    $('#modal-form [name=harga]').val(response.harga);
                     $('#modal-form [name=jumlah]').val(response.jumlah);
                 })
                 .fail((errors) => {

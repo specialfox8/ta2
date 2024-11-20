@@ -31,8 +31,11 @@ class BarangController extends Controller
             ->addColumn('kode_barang', function ($barang) {
                 return '<span class="label label-success">' . $barang->kode_barang . '</span>';
             })
-            ->addColumn('harga', function ($barang) {
-                return format_uang($barang->harga);
+            ->addColumn('harga_beli', function ($barang) {
+                return 'Rp. ' . format_uang($barang->harga_beli);
+            })
+            ->addColumn('harga_jual', function ($barang) {
+                return 'Rp. ' . format_uang($barang->harga_jual);
             })
             ->addColumn('jumlah', function ($barang) {
                 return format_uang($barang->jumlah);
