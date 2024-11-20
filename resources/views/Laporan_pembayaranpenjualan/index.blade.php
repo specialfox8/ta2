@@ -24,7 +24,7 @@
                         <i></i> Ganti Tanggal
                     </button> --}}
 
-                    <a href="{{ route('laporan_penjualan.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
+                    <a href="{{ route('laporan_pembayaranpenjualan.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
                         class="btn btn-info btn-flat btn-xs">
                         <i class="fa fa-plus-circle"></i> Export PDF
                     </a>
@@ -34,7 +34,7 @@
                         <thead>
                             <th width="5%">No</th>
                             <th>Kode Penjualan</th>
-                            <th>Nama supplier</th>
+                            <th>Nama Konsumen</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -50,8 +50,8 @@
     </div>
 @endsection
 
-@includeIf('laporan_penjualan.form')
-@includeIf('laporan_penjualan.detail')
+@includeIf('laporan_pembayaranpenjualan.form')
+@includeIf('laporan_pembayaranpenjualan.detail')
 
 
 @push('scripts')
