@@ -41,7 +41,7 @@ class PembelianDetilController extends Controller
             $row = array();
             $row['kode_barang'] = '<span class="label label-success">' . $item->barang['kode_barang'] . '</span>';
             $row['nama_barang'] = $item->barang['nama_barang'];
-            $row['harga'] = 'Rp. ' . format_uang($item->harga);
+            $row['harga_beli'] = 'Rp. ' . format_uang($item->harga_beli);
             $row['jumlah'] =
                 '<input type="number" class="form-control input-sm editjumlah" data-id="' . $item->id_pembelian_detil . '" value="' . $item->jumlah . '">';
             $row['subtotal'] = 'Rp. ' . format_uang($item->subtotal);
@@ -50,7 +50,7 @@ class PembelianDetilController extends Controller
                 </div>';
             $data[] = $row;
 
-            $total += $item->harga * $item->jumlah;
+            $total += $item->harga_beli * $item->jumlah;
             $total_item += $item->jumlah;
         }
 
@@ -58,7 +58,7 @@ class PembelianDetilController extends Controller
             'kode_barang' => '<div class="total hide">' . $total . '</div>
                 <div class="total_item hide">' . $total_item . '</div>',
             'nama_barang' => '',
-            'harga' => '',
+            'harga_beli' => '',
             'jumlah' => '',
             'subtotal' => '',
             'aksi' => '',
@@ -81,9 +81,9 @@ class PembelianDetilController extends Controller
         $detil = new PembelianDetil();
         $detil->id_pembelian = $request->id_pembelian;
         $detil->id_barang = $barang->id_barang;
-        $detil->harga = $barang->harga;
+        $detil->harga_beli = $barang->harga_beli;
         $detil->jumlah = 1;
-        $detil->subtotal = $barang->harga;
+        $detil->subtotal = $barang->harga_beli;
         $detil->save();
 
         return response()->json('Data Berhasil Disimpan', 200);
@@ -93,7 +93,7 @@ class PembelianDetilController extends Controller
     {
         $detil = PembelianDetil::find($id);
         $detil->jumlah = $request->jumlah;
-        $detil->subtotal = $detil->harga * $request->jumlah;
+        $detil->subtotal = $detil->harga_beli * $request->jumlah;
         $detil->update();
     }
 
@@ -107,7 +107,6 @@ class PembelianDetilController extends Controller
 
     public function loadForm($diskon, $total)
     {
-        // dd($diskon, $total);
         $bayar = $total - ($diskon / 100 * $total);
         $data  = [
             'totalrp' => format_uang($total),

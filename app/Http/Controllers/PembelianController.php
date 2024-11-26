@@ -61,8 +61,23 @@ class PembelianController extends Controller
      */
     public function create($id)
     {
+        $tahun = date('y'); // Contoh: 24 untuk tahun 2024
+        $bulan = date('m');
+        $hari = date('d'); // Contoh: 11 untuk bulan November
+
+        // Cari kode pembelian terakhir di bulan dan tahun yang sama
+        $lastKode = Pembelian::whereYear('created_at', date('Y'))
+            ->whereMonth('created_at', date('m'))
+            ->orderBy('id_pembelian', 'desc')
+            ->first();
+
+        $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
+        $kode_pembelian = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
+
         $detil = new Pembelian();
         $detil->id_supplier = $id;
+        $detil->kode_pembelian = $kode_pembelian;
         $detil->total_item = 0;
         $detil->total_harga = 0;
         $detil->diskon = 0;
@@ -77,7 +92,9 @@ class PembelianController extends Controller
 
     public function store(Request $request)
     {
+
         $detil = Pembelian::find($request->id_pembelian);
+        // $detil->kode_pembelian = $request->kode_pembelian;
         $detil->total_item = $request->total_item;
         $detil->total_harga = $request->total;
         $detil->diskon = $request->diskon;

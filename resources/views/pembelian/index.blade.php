@@ -29,7 +29,6 @@
                             <th width="5%">No</th>
                             <th>Kode penjualan</th>
                             <th>Nama Supplier</th>
-
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
@@ -63,10 +62,12 @@
                         data: 'DT_RowIndex',
                         searchable: false,
                         sortable: false
-                    }, {
-                        data: 'supplier'
-                    }, {
+                    },
+                    {
                         data: 'kode_pembelian'
+                    },
+                    {
+                        data: 'supplier'
                     }, {
                         data: 'total_harga'
                     }, {

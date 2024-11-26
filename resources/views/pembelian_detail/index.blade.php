@@ -167,7 +167,7 @@
                             data: 'nama_barang'
                         },
                         {
-                            data: 'harga'
+                            data: 'harga_beli'
                         },
                         {
                             data: 'jumlah'
@@ -289,7 +289,7 @@
                     $('#bayarrp').val('Rp.' + response.bayarrp);
                     $('#bayar').val(response.bayar);
                     $('.tampil-bayar').text('Rp.' + response.bayarrp);
-                    $('.tampil-terbilang').text('Rp.' + response.terbilang);
+                    // $('.tampil-terbilang').text('Rp.' + response.terbilang);
                 })
                 .fail(errors => {
                     alert('Tidak dapat menampilkan data');
