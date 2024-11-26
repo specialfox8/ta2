@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 
 class PembelianDetilController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $id_pembelian = session('id_pembelian');

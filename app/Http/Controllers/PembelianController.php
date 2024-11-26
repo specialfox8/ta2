@@ -61,11 +61,11 @@ class PembelianController extends Controller
      */
     public function create($id)
     {
-        $tahun = date('y'); // Contoh: 24 untuk tahun 2024
+        $tahun = date('y');
         $bulan = date('m');
-        $hari = date('d'); // Contoh: 11 untuk bulan November
+        $hari = date('d');
 
-        // Cari kode pembelian terakhir di bulan dan tahun yang sama
+
         $lastKode = Pembelian::whereYear('created_at', date('Y'))
             ->whereMonth('created_at', date('m'))
             ->orderBy('id_pembelian', 'desc')

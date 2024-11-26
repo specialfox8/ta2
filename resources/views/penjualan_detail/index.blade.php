@@ -167,7 +167,7 @@
                             data: 'nama_barang'
                         },
                         {
-                            data: 'harga'
+                            data: 'harga_jual'
                         },
                         {
                             data: 'jumlah'

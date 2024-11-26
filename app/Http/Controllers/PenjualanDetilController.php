@@ -38,7 +38,7 @@ class PenjualanDetilController extends Controller
             $row = array();
             $row['kode_barang'] = '<span class="label label-success">' . $item->barang['kode_barang'] . '</span>';
             $row['nama_barang'] = $item->barang['nama_barang'];
-            $row['harga'] = 'Rp. ' . format_uang($item->harga);
+            $row['harga_jual'] = 'Rp. ' . format_uang($item->harga_jual);
             $row['jumlah'] =
                 '<input type="number" class="form-control input-sm editjumlah" data-id="' . $item->id_penjualan_detil . '" value="' . $item->jumlah . '">';
             $row['subtotal'] = 'Rp. ' . format_uang($item->subtotal);
@@ -52,7 +52,7 @@ class PenjualanDetilController extends Controller
             //     </div>';
             $data[] = $row;
 
-            $total += $item->harga * $item->jumlah;
+            $total += $item->harga_jual * $item->jumlah;
             $total_item += $item->jumlah;
         }
 
@@ -60,7 +60,7 @@ class PenjualanDetilController extends Controller
             'kode_barang' => '<div class="total hide">' . $total . '</div>
                 <div class="total_item hide">' . $total_item . '</div>',
             'nama_barang' => '',
-            'harga' => '',
+            'harga_jual' => '',
             'jumlah' => '',
             'subtotal' => '',
             'aksi' => '',
@@ -83,9 +83,9 @@ class PenjualanDetilController extends Controller
         $detil = new PenjualanDetil();
         $detil->id_penjualan = $request->id_penjualan;
         $detil->id_barang = $barang->id_barang;
-        $detil->harga = $barang->harga;
+        $detil->harga_jual = $barang->harga_jual;
         $detil->jumlah = 1;
-        $detil->subtotal = $barang->harga;
+        $detil->subtotal = $barang->harga_jual;
         $detil->save();
 
         return response()->json('Data berhasil disimpan', 200);
@@ -95,7 +95,7 @@ class PenjualanDetilController extends Controller
     {
         $detil = PenjualanDetil::find($id);
         $detil->jumlah = $request->jumlah;
-        $detil->subtotal = $detil->harga * $request->jumlah;
+        $detil->subtotal = $detil->harga_jual * $request->jumlah;
         $detil->update();
     }
 

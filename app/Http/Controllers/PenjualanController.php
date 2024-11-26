@@ -66,8 +66,21 @@ class PenjualanController extends Controller
      */
     public function create($id)
     {
+        $tahun = date('y');
+        $bulan = date('m');
+        $hari = date('d');
+
+        $lastKode = Penjualan::whereYear('created_at', date('Y'))
+            ->whereMonth('created_at', date('m'))
+            ->orderBy('id_penjualan', 'desc')
+            ->first();
+
+        $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
+        $kode_penjualan = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
         $detil = new Penjualan();
         $detil->id_konsumen = $id;
+        $detil->kode_penjualan = $kode_penjualan;
         $detil->total_item = 0;
         $detil->total_harga = 0;
         $detil->diskon = 0;
@@ -116,7 +129,7 @@ class PenjualanController extends Controller
                 return $detil->barang->nama_barang;
             })
             ->addColumn('harga', function ($detil) {
-                return 'Rp.' . format_uang($detil->harga);
+                return 'Rp.' . format_uang($detil->harga_jual);
             })
             ->addColumn('jumlah', function ($detil) {
                 return  format_uang($detil->jumlah);
