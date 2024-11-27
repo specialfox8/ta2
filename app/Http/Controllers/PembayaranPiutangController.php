@@ -30,15 +30,15 @@ class PembayaranPiutangController extends Controller
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
-            ->addColumn('tanggal', function ($penjualan) {
+            ->addColumn('tanggalbli', function ($penjualan) {
                 return tanggal_indonesia($penjualan->created_at, false);
+            })
+            ->addColumn('tanggalbyr', function ($penjualan) {
+                return tanggal_indonesia($penjualan->updated_at, false);
             })
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
             })
-            // ->addColumn('konsumen', function ($penjualan) {
-            //     return $penjualan->konsumen ? $penjualan->konsumen->nama : 'Tidak ada Konsumen';
-            // })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
@@ -56,7 +56,6 @@ class PembayaranPiutangController extends Controller
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                <button onclick="editPenjualan(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
                 <button onclick="showDetailPenjualan(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
                 </div>
                 ';

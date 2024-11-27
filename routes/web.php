@@ -9,6 +9,7 @@ use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\LaporanPersediaanController;
 use App\Http\Controllers\PembayaranPiutangController;
+use App\Http\Controllers\PembayranUtangController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PembelianDetilController;
 use App\Http\Controllers\PenjualanController;
@@ -90,9 +91,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/pembayaran_penjualan', PembayaranPiutangController::class)
         ->except('create');
 
-    Route::get('pembayaran_pembelian/data', [PembayaranPiutangController::class, 'data'])->name('pembayaran_pembelian.data');
-    Route::put('pembayaran_pembelian//{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_pembelian.updateStatus');
-    Route::resource('/pembayaran_pembelian', PembayaranPiutangController::class)
+    Route::get('pembayaran_pembelian/data', [PembayranUtangController::class, 'data'])->name('pembayaran_pembelian.data');
+    Route::put('pembayaran_pembelian//{id}/status', [PembayranUtangController::class, 'updateStatus'])->name('pembayaran_pembelian.updateStatus');
+    Route::resource('/pembayaran_pembelian', PembayranUtangController::class)
         ->except('create');
 
     Route::get('/laporan_pembayaranpembelian', [LaporanPembayaranPembelianController::class, 'index'])->name('laporan_pembayaranpembelian.index');

@@ -42,12 +42,9 @@ class LaporanPersediaanController extends Controller
     }
     public function exportpdf(Request $request)
     {
-        // Ambil data pembelian dari database
         $pembelian = Barang::orderBy('id_barang', 'desc')->get();
 
-        // Render view menjadi PDF
         return view('laporan_persediaan.pdf', compact('barang'));
-        // Tentukan nama file yang akan di-download
         return $pdf->download('laporan_persediaan_' . '.pdf');
     }
 }

@@ -1,38 +1,29 @@
 @extends('layouts.master')
 
 @section('title')
-    Pembayaran Penjualan
+    Pembayaran pembelian
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Pembayaran Penjualan</li>
+    <li class="active">Pembayaran pembelian</li>
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box">
-                {{-- <div class="box-header with-border">
-                    <button onclick="addForm()" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>
-                        Transaksi Baru</button>
-                    @empty(!session('id_penjualan'))
-                        <a href="{{ route('penjualan_detail.index') }}" class="btn btn-info btn-xs btn-flat">
-                            <i class="fa fa-edit"></i>
-                            Transaksi Aktif</a>
-                    @endempty
-                </div> --}}
-                <!-- /.box-header -->
                 <div class="box-body table-responsive">
-                    <table class="table table-stiped table-border table-penjualan">
+                    <table class="table table-stiped table-border table-pembelian">
                         <thead>
                             <th width="5%">No</th>
-                            <th>Kode Penjualan</th>
+                            <th>Kode pembelian</th>
                             <th>Nama supplier</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
-                            <th>Tanggal Penjualan</th>
+                            <th>Tanggal pembelian</th>
+                            <th>Tanggal pembayaran</th>
                             <th>Status</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
@@ -45,19 +36,19 @@
     </div>
     <!-- /.row (main row) -->
 
-    @includeIf('penjualan.konsumen')
-    @includeIf('penjualan.detail')
+    @includeIf('pembelian.supplier')
+    @includeIf('pembelian.detail')
 @endsection
 @push('scripts')
     <script>
         let table, table2;
         $(function() {
-            table = $('.table-penjualan').DataTable({
+            table = $('.table-pembelian').DataTable({
                 bSort: false,
                 processing: true,
                 dom: 'Brt',
                 ajax: {
-                    url: '{{ route('pembayaran_penjualan.data') }}',
+                    url: '{{ route('pembayaran_pembelian.data') }}',
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -65,10 +56,10 @@
                         sortable: false
                     },
                     {
-                        data: 'kode_penjualan'
+                        data: 'kode_pembelian'
                     },
                     {
-                        data: 'konsumen'
+                        data: 'supplier'
                     },
                     {
                         data: 'total_harga'
@@ -78,7 +69,10 @@
                         data: 'bayar'
                     },
                     {
-                        data: 'tanggal'
+                        data: 'tanggalbli'
+                    },
+                    {
+                        data: 'tanggalbyr'
                     },
                     {
                         data: 'status',
@@ -122,8 +116,8 @@
 
         }
 
-        function showDetailPenjualan(url) {
-            $('#modal-detail-penjualan').modal('show');
+        function showDetailpembelian(url) {
+            $('#modal-detail-pembelian').modal('show');
             table2.ajax.url(url);
             table2.ajax.reload();
         }
