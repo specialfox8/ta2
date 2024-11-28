@@ -4,44 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\Pembelian;
 use App\Models\PembelianDetil;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class LaporanPembayaranPembelianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $tanggalawal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $tanggalakhir = date('Y-m-d');
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         return view('laporan_pembayaranpembelian.index', compact('tanggalawal', 'tanggalakhir'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
 
-        $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+
+        // $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
+        $pembelian = Pembelian::with('supplier')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('id_pembelian', 'desc')
+            ->get();
 
 
         return datatables()
             ->of($pembelian)
             ->addIndexColumn()
-            ->addColumn('total_item', function ($pembelian) {
-                return format_uang($pembelian->total_item);
-            })
             ->addColumn('total_harga', function ($pembelian) {
                 return 'Rp.' . format_uang($pembelian->total_harga);
             })
             ->addColumn('bayar', function ($pembelian) {
                 return 'Rp.' . format_uang($pembelian->bayar);
             })
-            ->addColumn('tanggal', function ($pembelian) {
-                return tanggal_indonesia($pembelian->created_at, false);
+            ->addColumn('tanggalbyr', function ($pembelian) {
+                return tanggal_indonesia($pembelian->updated_at, false);
             })
             ->addColumn('supplier', function ($pembelian) {
                 return $pembelian->supplier->nama;
             })
             ->editColumn('diskon', function ($pembelian) {
                 return $pembelian->diskon . '%';
+            })
+            ->addColumn('status', function ($pembelian) {
+                return $pembelian->status;
             })
             ->addColumn('aksi', function ($pembelian) {
                 return '
@@ -64,13 +72,13 @@ class LaporanPembayaranPembelianController extends Controller
             ->of($detil)
             ->addIndexColumn()
             ->addColumn('kode_barang', function ($detil) {
-                return '<span class="label label-success">' . $detil->barang->kode_barang . '</span>';
+                return  $detil->barang->kode_barang . '</span>';
             })
             ->addColumn('nama_barang', function ($detil) {
                 return $detil->barang->nama_barang;
             })
             ->addColumn('harga', function ($detil) {
-                return 'Rp.' . format_uang($detil->harga);
+                return 'Rp.' . format_uang($detil->harga_beli);
             })
             ->addColumn('jumlah', function ($detil) {
                 return  format_uang($detil->jumlah);
@@ -87,12 +95,16 @@ class LaporanPembayaranPembelianController extends Controller
 
     public function exportpdf(Request $request)
     {
-        // Ambil data pembelian dari database
-        $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
-        // Render view menjadi PDF
-        return view('laporan_pembayaranpembelian.pdf', compact('pembelian'));
-        // Tentukan nama file yang akan di-download
-        return $pdf->download('laporan_pembayaranpembelian_' . date('Ymd') . '.pdf');
+        $pembelian = Pembelian::with(['supplier', 'detil.barang'])
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('laporan_pembayaranpembelian.pdf', compact('pembelian', 'tanggalawal', 'tanggalakhir'));
+
+        return $pdf->download('laporan_pembayaranpembelian_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
     }
 }

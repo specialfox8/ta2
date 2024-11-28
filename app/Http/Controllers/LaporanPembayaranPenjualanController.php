@@ -4,49 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
 use App\Models\PenjualanDetil;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class LaporanPembayaranPenjualanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $tanggalawal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $tanggalakhir = date('Y-m-d');
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         return view('laporan_pembayaranpenjualan.index', compact('tanggalawal', 'tanggalakhir'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
-        $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
-
+        // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+        $penjualan = Penjualan::with('konsumen')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('id_penjualan', 'desc')
+            ->get();
 
         return datatables()
             ->of($penjualan)
             ->addIndexColumn()
-            ->addColumn('total_item', function ($penjualan) {
-                return format_uang($penjualan->total_item);
-            })
+
             ->addColumn('total_harga', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->total_harga);
             })
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
-            ->addColumn('tanggal', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
+            ->addColumn('tanggalbyr', function ($penjualan) {
+                return tanggal_indonesia($penjualan->updated_at, false);
             })
-            ->addColumn('konsimen', function ($penjualan) {
-                return $penjualan->konsimen->nama;
+            ->addColumn('konsumen', function ($penjualan) {
+                return $penjualan->konsumen->nama;
             })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
+            ->addColumn('status', function ($penjualan) {
+                return $penjualan->status;
+            })
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                <button onclick="showLaporanPembelian(`' . route('pembelian.show', $penjualan->id_pembelian) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                <button onclick="showLaporanPenjualan(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
                         </div>
                 ';
             })
@@ -57,20 +64,20 @@ class LaporanPembayaranPenjualanController extends Controller
     public function show($id)
     {
         $detil = PenjualanDetil::with('barang')
-            ->where('id_pembelian', $id)
+            ->where('id_penjualan', $id)
             ->get();
 
         return datatables()
             ->of($detil)
             ->addIndexColumn()
             ->addColumn('kode_barang', function ($detil) {
-                return '<span class="label label-success">' . $detil->barang->kode_barang . '</span>';
+                return $detil->barang->kode_barang . '</span>';
             })
             ->addColumn('nama_barang', function ($detil) {
                 return $detil->barang->nama_barang;
             })
             ->addColumn('harga', function ($detil) {
-                return 'Rp.' . format_uang($detil->harga);
+                return 'Rp.' . format_uang($detil->harga_jual);
             })
             ->addColumn('jumlah', function ($detil) {
                 return  format_uang($detil->jumlah);
@@ -87,12 +94,16 @@ class LaporanPembayaranPenjualanController extends Controller
 
     public function exportpdf(Request $request)
     {
-        // Ambil data pembelian dari database
-        $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
-        // Render view menjadi PDF
-        return view('laporan_pembayaranpenjualan.pdf', compact('pembelian'));
-        // Tentukan nama file yang akan di-download
-        return $pdf->download('laporan_pembayaranpenjualan_' . date('Ymd') . '.pdf');
+        $penjualan = Penjualan::with(['konsumen', 'detil.barang'])
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('laporan_pembayaranpenjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir'));
+
+        return $pdf->download('laporan_pembayaranpenjualan_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
     }
 }

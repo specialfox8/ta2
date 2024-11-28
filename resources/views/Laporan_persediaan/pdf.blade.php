@@ -31,36 +31,36 @@
 </head>
 
 <body>
-    <h1>Laporan Persediaan/h1>
-        <table>
-            <thead>
+    <h1>Laporan Persediaan</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Kategori</th>
+                <th>Harga Beli</th>
+                <th>Harga Jual</th>
+                <th>Stok</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($persediaan as $key => $item)
                 <tr>
-                    <th>No</th>
-                    <th>Kode barang</th>
-                    <th>Nama Barang</th>
-                    <th>Harga Beli</th>
-                    <th>Harga Jual</th>
-                    <th>Stok</th>
+                    <td>{{ $key + 1 }}</td>
+                    <td>{{ $item->kode_barang }}</td>
+                    <td>{{ $item->nama_barang }}</td>
+                    <td>{{ $item->kategori->nama_kategori ?? 'Tidak Ada Kategori' }}</td> <!-- Perbaikan di sini -->
+                    <td>Rp. {{ format_uang($item->harga_beli) }}</td>
+                    <td>Rp. {{ format_uang($item->harga_jual) }}</td>
+                    <td>{{ format_uang($item->jumlah) }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($barang as $key => $item)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ tanggal_indonesia($item->created_at, false) }}</td>
-                        <td>{{ $item->barang->nama }}</td>
-                        <td>{{ format_uang($item->total_item) }}</td>
-                        <td>Rp.{{ format_uang($item->total_harga) }}</td>
-                        <td>Rp.{{ format_uang($item->bayar) }}</td>
-                        <td>{{ $item->diskon }}%</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <script type="text/javascript">
-            window.print();
-        </script>
+            @endforeach
+        </tbody>
+    </table>
+    <script type="text/javascript">
+        window.print();
+    </script>
 </body>
-
 
 </html>

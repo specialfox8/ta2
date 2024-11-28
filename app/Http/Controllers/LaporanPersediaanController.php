@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Kategori;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class LaporanPersediaanController extends Controller
@@ -26,7 +27,7 @@ class LaporanPersediaanController extends Controller
             ->of($barang)
             ->addIndexColumn()
             ->addColumn('kode_barang', function ($barang) {
-                return '<span class="label label-success">' . $barang->kode_barang . '</span>';
+                return  $barang->kode_barang;
             })
             ->addColumn('harga_beli', function ($barang) {
                 return 'Rp. ' . format_uang($barang->harga_beli);
@@ -42,9 +43,10 @@ class LaporanPersediaanController extends Controller
     }
     public function exportpdf(Request $request)
     {
-        $pembelian = Barang::orderBy('id_barang', 'desc')->get();
+        $persediaan = Barang::orderBy('id_barang', 'desc')->get();
 
-        return view('laporan_persediaan.pdf', compact('barang'));
-        return $pdf->download('laporan_persediaan_' . '.pdf');
+        $pdf = Pdf::loadView('laporan_persediaan.pdf', compact('persediaan'));
+
+        return $pdf->download('laporan_persediaan_' . date('Ymd') . '.pdf');
     }
 }

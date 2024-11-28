@@ -42,7 +42,7 @@
                 <td>{{ $item->kode_pembelian }}</td>
             </tr>
             <tr>
-                <th>Tanggal</th>
+                <th>Tanggal Pembelian</th>
                 <td>{{ tanggal_indonesia($item->created_at, false) }}</td>
             </tr>
             <tr>

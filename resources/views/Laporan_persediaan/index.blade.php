@@ -15,7 +15,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <a href="{{ route('laporan_persediaan.exportpdf') }}" class="btn btn-info btn-flat btn-xs">
-                        <i class="fa fa-plus-circle"></i> Export PDF
+                        <i class="fa fa-plus-circle"></i> Download PDF
                     </a>
                 </div>
                 <div class="box-body table-responsive">
