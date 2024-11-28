@@ -65,14 +65,11 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        $barang = Barang::latest()->first() ?? new Barang();
-        $request['kode_barang'] = 'B' . tambah_nol_kode((int)$barang->id_barang + 1, 3);
+        $barangTerakhir = Barang::latest('id_barang')->first();
 
-        // Check if $barang exists, if not set the kode_barang to a default value
-        // $kode_barang = $barang ? tambah_nol_kode($barang->id, 3) : '001';
+        $idBarangBaru = ($barangTerakhir ? $barangTerakhir->id_barang : 0) + 1;
 
-        // Add the kode_barang to the request
-        // $request['kode_barang'] = 'B' . $kode_barang;
+        $request['kode_barang'] = str_pad($idBarangBaru, 4, '0', STR_PAD_LEFT);
 
         $barang = Barang::create($request->all());
 
