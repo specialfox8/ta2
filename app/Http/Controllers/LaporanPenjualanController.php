@@ -4,25 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
 use App\Models\PenjualanDetil;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use PDF;
 use Illuminate\Http\Request;
 
 
 class LaporanPenjualanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        $tanggalawal = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $tanggalakhir = date('Y-m-d');
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         return view('laporan_penjualan.index', compact('tanggalawal', 'tanggalakhir'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
-        $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
-
+        // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+        $penjualan = Penjualan::with('konsumen')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('id_penjualan', 'desc')
+            ->get();
 
         return datatables()
             ->of($penjualan)
@@ -35,6 +41,9 @@ class LaporanPenjualanController extends Controller
             })
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
+            })
+            ->addColumn('tanggalbli', function ($penjualan) {
+                return tanggal_indonesia($penjualan->created_at, false);
             })
             ->addColumn('tanggal', function ($penjualan) {
                 return tanggal_indonesia($penjualan->created_at, false);
@@ -72,7 +81,7 @@ class LaporanPenjualanController extends Controller
                 return $detil->barang->nama_barang;
             })
             ->addColumn('harga', function ($detil) {
-                return 'Rp.' . format_uang($detil->harga);
+                return 'Rp.' . format_uang($detil->harga_jual);
             })
             ->addColumn('jumlah', function ($detil) {
                 return  format_uang($detil->jumlah);
@@ -88,14 +97,15 @@ class LaporanPenjualanController extends Controller
     }
     public function exportpdf(Request $request)
     {
-        // Ambil data penjualan dari database
-        $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
-        // Render view menjadi PDF, misalnya 'laporan_penjualan.pdf'
-        // Pastikan view ini ada di resources/views/laporan_penjualan/pdf.blade.php
-        $pdf = PDF::loadView('laporan_penjualan.pdf', compact('penjualan'));
+        $penjualan = Penjualan::with(['konsumen', 'detil.barang'])
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $pdf = FacadePdf::loadView('laporan_penjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir'));
 
-        // Tentukan nama file yang akan di-download dan kembalikan sebagai file PDF
-        return $pdf->download('laporan_penjualan_' . date('Ymd') . '.pdf');
+        return $pdf->download('laporan_penjualan_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
     }
 }

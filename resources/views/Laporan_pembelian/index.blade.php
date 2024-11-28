@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pembelian {{ tanggal_indonesia($tanggalawal, false) }} s/d {{ tanggal_indonesia($tanggalakhir, false) }}
+    Laporan Pembelian
 @endsection
 
 @push('css')
@@ -19,14 +19,30 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header with-border">
-                    {{-- <button onclick="updatePeriode()" class="btn btn-success btn-xs btn-flat">
-                        <i></i> Ganti Tanggal
-                    </button> --}}
+                    <form id="form-periode" method="get" action="{{ route('laporan_pembelian.index') }}" class="form-inline">
+                        <div class="form-group">
+                            <label for="tanggalawal">Tanggal Awal</label>
+                            <input type="text" name="tanggalawal" id="tanggalawal" class="form-control datepicker"
+                                value="{{ request('tanggalawal', date('Y-m-01')) }}" placeholder="YYYY-MM-DD">
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggalakhir">Tanggal Akhir</label>
+                            <input type="text" name="tanggalakhir" id="tanggalakhir" class="form-control datepicker"
+                                value="{{ request('tanggalakhir', date('Y-m-d')) }}" placeholder="YYYY-MM-DD">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tampilkan</button>
+                    </form>
 
-                    <a href="{{ route('laporan_pembelian.exportpdf', [$tanggalawal, $tanggalakhir]) }}"
-                        class="btn btn-info btn-flat btn-xs">
-                        <i class="fa fa-plus-circle"></i> Export PDF
-                    </a>
+                    <form method="get" action="{{ route('laporan_pembelian.exportpdf') }}" class="form-inline"
+                        id="form-pdf">
+                        <input type="hidden" name="tanggalawal" id="pdf-tanggalawal"
+                            value="{{ request('tanggalawal', date('Y-m-01')) }}">
+                        <input type="hidden" name="tanggalakhir" id="pdf-tanggalakhir"
+                            value="{{ request('tanggalakhir', date('Y-m-d')) }}">
+                        <button type="submit" class="btn btn-info btn-flat btn-xs">
+                            <i class="fa fa-download"></i> Download PDF
+                        </button>
+                    </form>
                 </div>
                 <div class="box-body table-responsive">
                     <table class="table table-striped table-bordered table-laporan-pembelian">
@@ -37,7 +53,8 @@
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Pembelian</th>
+                            <th>Tanggal Pembayaran</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                             {{-- <th>Total harga</th>
                             <th>Diskon</th>  --}}
@@ -65,6 +82,10 @@
                 autoWidth: false,
                 ajax: {
                     url: '{{ route('laporan_pembelian.data') }}',
+                    data: function(d) {
+                        d.tanggalawal = $('#tanggalawal').val();
+                        d.tanggalakhir = $('#tanggalakhir').val();
+                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -84,7 +105,10 @@
                     }, {
                         data: 'bayar'
                     }, {
-                        data: 'tanggal'
+                        data: 'tanggalbli'
+                    },
+                    {
+                        data: 'tanggalbyr'
                     },
                     {
                         data: 'aksi',
@@ -93,6 +117,18 @@
                     },
                 ]
             });
+
+            $('#form-periode').on('submit', function(e) {
+                e.preventDefault();
+                const tanggalawal = $('#tanggalawal').val();
+                const tanggalakhir = $('#tanggalakhir').val();
+
+                $('#pdf-tanggalawal').val(tanggalawal);
+                $('#pdf-tanggalakhir').val(tanggalakhir);
+
+                table.ajax.reload();
+            });
+
             table2 = $('.table-laporan-detail').DataTable({
                 processing: true,
                 bSort: false,

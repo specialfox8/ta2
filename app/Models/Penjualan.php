@@ -17,4 +17,8 @@ class Penjualan extends Model
     {
         return $this->belongsTo(Konsumen::class, 'id_konsumen', 'id_konsumen');
     }
+    public function detil()
+    {
+        return $this->hasMany(PenjualanDetil::class, 'id_penjualan');
+    }
 }
