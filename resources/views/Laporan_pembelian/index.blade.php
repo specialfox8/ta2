@@ -53,8 +53,8 @@
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>
-                            <th>Tanggal Pembelian</th>
-                            <th>Tanggal Pembayaran</th>
+                            <th>Tanggal </th>
+
                             <th width="15%"><i class="fa fa-cog"></i></th>
                             {{-- <th>Total harga</th>
                             <th>Diskon</th>  --}}
@@ -106,9 +106,6 @@
                         data: 'bayar'
                     }, {
                         data: 'tanggalbli'
-                    },
-                    {
-                        data: 'tanggalbyr'
                     },
                     {
                         data: 'aksi',

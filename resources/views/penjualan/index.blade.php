@@ -28,7 +28,7 @@
                         <thead>
                             <th width="5%">No</th>
                             <th>Kode penjualan</th>
-                            <th>Nama supplier</th>
+                            <th>Nama konsumen</th>
                             <th>Total Harga</th>
                             <th>Diskon</th>
                             <th>Total Bayar</th>

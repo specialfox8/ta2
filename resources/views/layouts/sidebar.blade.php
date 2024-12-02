@@ -21,10 +21,10 @@
             </li>
 
             {{-- Data Master --}}
-            <li class="header">Data Master</li>
+            {{-- <li class="header">Data Master</li> --}}
             <li class="active treeview">
                 <a href="#">
-                    <i class="fa fa-archive" aria-hidden="true"></i></i> <span>Master</span>
+                    <i class="fa fa-archive" aria-hidden="true"></i></i> <span>Data Master</span>
                     <span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -41,19 +41,19 @@
                 </ul>
             </li>
             {{-- Data Transaksi --}}
-            <li class="header">Data transaksi</li>
+            {{-- <li class="header">Data transaksi</li> --}}
             <li class="active treeview">
                 <a href="#">
-                    <i class="fa fa-usd" aria-hidden="true"></i></i> <span>Transaksi</span>
+                    <i class="fa fa-usd" aria-hidden="true"></i></i> <span>Data transaksi</span>
                     <span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="active"><a href="{{ route('pembelian.index') }}"><i
-                                class="fa fa-circle-o"></i>Pembelian</a></i> </li>
                     <li class="active"><a href="{{ route('penjualan.index') }}">
                             <i class="fa fa-circle-o"></i>Penjualan</a></i></li>
+                    <li class="active"><a href="{{ route('pembelian.index') }}"><i
+                                class="fa fa-circle-o"></i>Pembelian</a></i> </li>
 
 
                     <li class="active"><a href="{{ route('pembayaran_pembelian.index') }}"><i
