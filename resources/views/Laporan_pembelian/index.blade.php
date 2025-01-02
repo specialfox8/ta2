@@ -60,6 +60,9 @@
                             <th>Diskon</th>  --}}
                         </thead>
                     </table>
+                    <div class="text-right">
+                        <h3>Total Pendapatan: Rp. {{ format_uang($totalPendapatan) }}</h3>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,6 +116,7 @@
                         sortable: false
                     },
                 ]
+
             });
 
             $('#form-periode').on('submit', function(e) {

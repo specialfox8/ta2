@@ -33,6 +33,7 @@
 <body>
     <h1>Laporan Penjualan</h1>
     <p>Periode: {{ tanggal_indonesia($tanggalawal, false) }} - {{ tanggal_indonesia($tanggalakhir, false) }}</p>
+    <h3>Total Harga Pendapatan Pembelian: Rp.{{ format_uang($totalPendapatan) }}</h3>
 
     @foreach ($penjualan as $key => $item)
         <h3>Penjualan {{ $key + 1 }}</h3>

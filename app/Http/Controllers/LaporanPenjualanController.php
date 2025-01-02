@@ -16,7 +16,16 @@ class LaporanPenjualanController extends Controller
 
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-        return view('laporan_penjualan.index', compact('tanggalawal', 'tanggalakhir'));
+
+        $penjualan = Penjualan::with('konsumen')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('id_penjualan', 'desc')
+            ->get();
+
+
+        $totalPendapatan = $penjualan->sum('bayar');
+
+        return view('laporan_penjualan.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan'));
     }
 
     public function data(Request $request)
@@ -104,7 +113,14 @@ class LaporanPenjualanController extends Controller
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
             ->orderBy('created_at', 'asc')
             ->get();
-        $pdf = FacadePdf::loadView('laporan_penjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir'));
+
+        $totalPendapatan = $penjualan->sum('bayar');
+
+        foreach ($penjualan as $item) {
+            $item->bayar = (float) $item->bayar;
+        }
+
+        $pdf = FacadePdf::loadView('laporan_penjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir', 'totalPendapatan'));
 
         return $pdf->download('laporan_penjualan_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
     }

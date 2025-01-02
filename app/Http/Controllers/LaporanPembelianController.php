@@ -16,7 +16,16 @@ class LaporanPembelianController extends Controller
 
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-        return view('laporan_pembelian.index', compact('tanggalawal', 'tanggalakhir'));
+
+        $pembelian = Pembelian::with('supplier')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('id_pembelian', 'desc')
+            ->get();
+
+
+        $totalPendapatan = $pembelian->sum('bayar');
+
+        return view('laporan_pembelian.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan'));
     }
 
     public function data(Request $request)
@@ -108,7 +117,13 @@ class LaporanPembelianController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $pdf = FacadePdf::loadView('laporan_pembelian.pdf', compact('pembelian', 'tanggalawal', 'tanggalakhir'));
+        $totalPendapatan = $pembelian->sum('bayar');
+
+        foreach ($pembelian as $item) {
+            $item->bayar = (float) $item->bayar;
+        }
+
+        $pdf = FacadePdf::loadView('laporan_pembelian.pdf', compact('pembelian', 'tanggalawal', 'tanggalakhir', 'totalPendapatan'));
 
         return $pdf->download('laporan_pembelian_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
     }
