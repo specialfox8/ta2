@@ -16,13 +16,14 @@ class PenjualanDetilController extends Controller
         $barang = Barang::orderBy('nama_barang')->get();
         $konsumen = Konsumen::find(session('id_konsumen'));
         $diskon = Penjualan::find($id_penjualan)->diskon ?? 0;
+        $kode_penjualan = Penjualan::find($id_penjualan)->kode_penjualan ?? null;
 
 
         if (! $konsumen) {
             abort(404);
         }
 
-        return view('penjualan_detail.index', compact('id_penjualan', 'barang', 'konsumen', 'diskon'));
+        return view('penjualan_detail.index', compact('id_penjualan', 'kode_penjualan', 'barang', 'konsumen', 'diskon'));
     }
 
     public function data($id)

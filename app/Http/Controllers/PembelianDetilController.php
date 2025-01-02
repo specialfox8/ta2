@@ -16,13 +16,15 @@ class PembelianDetilController extends Controller
         $barang = Barang::orderBy('nama_barang')->get();
         $supplier = Supplier::find(session('id_supplier'));
         $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;
+        $kode_pembelian = Pembelian::find($id_pembelian)->kode_pembelian ?? null;
+
 
 
         if (! $supplier) {
             abort(404);
         }
 
-        return view('pembelian_detail.index', compact('id_pembelian', 'barang', 'supplier', 'diskon'));
+        return view('pembelian_detail.index', compact('id_pembelian', 'kode_pembelian', 'kode_pembelian', 'barang', 'supplier', 'diskon'));
     }
 
     public function data($id)

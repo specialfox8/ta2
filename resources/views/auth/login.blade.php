@@ -35,6 +35,9 @@
                                 <input type="checkbox"> Remember Me
                             </label>
                         </div>
+                        <label>
+                            <a href="{{ route('register') }}" class="text-center">Create an account</a>
+                        </label>
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
@@ -46,7 +49,7 @@
 
 
 
-            {{-- <a href="#">I forgot my password</a><br>
+            {{--  <a href="#">I forgot my password</a><br>
             <a href="register.html" class="text-center">Register a new membership</a> --}}
 
         </div>

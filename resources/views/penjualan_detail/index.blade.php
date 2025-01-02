@@ -43,6 +43,9 @@
                 <div class="box-header with-border">
                     <table>
                         <tr>
+                            <h2>Kode Penjualan: <strong>{{ $kode_penjualan }}</strong></h2>
+                        </tr>
+                        <tr>
                             <td>Konsumen</td>
                             <td>: {{ $konsumen->nama }}</td>
                         </tr>

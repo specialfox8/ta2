@@ -43,6 +43,9 @@
                 <div class="box-header with-border">
                     <table>
                         <tr>
+                            <h4>Kode Pembelian: <strong>{{ $kode_pembelian }}</strong></h4>
+                        </tr>
+                        <tr>
                             <td>Supplier</td>
                             <td>: {{ $supplier->nama }}</td>
                         </tr>

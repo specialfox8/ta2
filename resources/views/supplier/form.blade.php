@@ -28,7 +28,9 @@
                     <div class="form-group row">
                         <label for="telepon" class="col-md-2 col-md-offset-1 control-label">Telepon</label>
                         <div class="col-md-9">
-                            <input type="text" name="telepon" id="telepon" class="form-control" required>
+                            <input type="text" name="telepon" id="telepon" class="form-control" required
+                                pattern="^\d{10,15}$"
+                                title="Nomor telepon harus berupa angka dengan panjang antara 10 hingga 15 karakter.">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
