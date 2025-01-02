@@ -71,8 +71,11 @@ class PembelianController extends Controller
             ->orderBy('id_pembelian', 'desc')
             ->first();
 
-        $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
+        $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
+        $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_pembelian, -3)) + 1);
+        // $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
         $kode_pembelian = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
 
 
         $detil = new Pembelian();

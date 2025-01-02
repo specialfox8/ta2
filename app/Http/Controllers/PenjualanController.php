@@ -75,7 +75,9 @@ class PenjualanController extends Controller
             ->orderBy('id_penjualan', 'desc')
             ->first();
 
-        $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
+        $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
+        // $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
+        $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_penjualan, -3)) + 1);
         $kode_penjualan = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
 
         $detil = new Penjualan();
