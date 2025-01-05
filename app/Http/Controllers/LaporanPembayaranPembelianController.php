@@ -14,7 +14,24 @@ class LaporanPembayaranPembelianController extends Controller
 
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-        return view('laporan_pembayaranpembelian.index', compact('tanggalawal', 'tanggalakhir'));
+        $status = $request->get('status', '');
+
+        $pembelian = Pembelian::with('supplier')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('id_pembelian', 'desc')
+        // ->get();
+
+        if ($status) {
+            $pembelian->where('status', $status);
+        }
+
+        $pembelian = $pembelian->orderBy('id_pembelian', 'desc')->get();
+
+
+        $totalPendapatan = $status ? $pembelian->where('status', $status)->sum('bayar') : $pembelian->sum('bayar');
+
+        // $totalPendapatan = $pembelian->sum('bayar');
+        return view('laporan_pembayaranpembelian.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
     }
 
     public function data(Request $request)
@@ -97,14 +114,45 @@ class LaporanPembayaranPembelianController extends Controller
     {
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
 
         $pembelian = Pembelian::with(['supplier', 'detil.barang'])
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('created_at', 'asc')
+        // ->get();
 
-        $pdf = Pdf::loadView('laporan_pembayaranpembelian.pdf', compact('pembelian', 'tanggalawal', 'tanggalakhir'));
+        if ($request->get('status')) {
+            $pembelian->where('status', $request->get('status'));
+        }
+
+        $pembelian = $pembelian->orderBy('created_at', 'asc')->get();
+
+        // $totalPendapatan = $pembelian->sum('bayar');
+        $totalPendapatan = $status ? $pembelian->where('status', $status)->sum('bayar') : $pembelian->sum('bayar');
+
+        foreach ($pembelian as $item) {
+            $item->bayar = (float) $item->bayar;
+        }
+
+        $pdf = Pdf::loadView('laporan_pembayaranpembelian.pdf', compact('pembelian', 'tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
 
         return $pdf->download('laporan_pembayaranpembelian_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
+    }
+
+    public function getTotalPendapatan(Request $request)
+    {
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
+
+        $pembelian = Pembelian::whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+
+        if ($status) {
+            $pembelian->where('status', $status);
+        }
+
+        $totalPendapatan = $pembelian->sum('bayar');
+
+        return response()->json(['totalPendapatan' => format_uang($totalPendapatan)]);
     }
 }

@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/laporan_penjualan/data', [LaporanPenjualanController::class, 'data'])->name('laporan_penjualan.data');
     Route::get('/laporan_penjualan/exportpdf', [LaporanPenjualanController::class, 'exportpdf'])->name('laporan_penjualan.exportpdf');
 
+
+
     Route::get('/laporan_pembelian', [LaporanPembelianController::class, 'index'])->name('laporan_pembelian.index');
     Route::post('/laporan_pembelian/refresh', [LaporanPembelianController::class, 'refresh'])->name('laporan_pembelian.refresh');
     Route::get('/laporan_pembelian/data', [LaporanPembelianController::class, 'data'])->name('laporan_pembelian.data');
@@ -100,11 +102,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_pembayaranpembelian/refresh', [LaporanPembayaranPembelianController::class, 'refresh'])->name('laporan_pembayaranpembelian.refresh');
     Route::get('/laporan_pembayaranpembelian/data', [LaporanPembayaranPembelianController::class, 'data'])->name('laporan_pembayaranpembelian.data');
     Route::get('/laporan_pembayaranpembelian/exportpdf', [LaporanPembayaranPembelianController::class, 'exportpdf'])->name('laporan_pembayaranpembelian.exportpdf');
+    Route::get('laporan-pembayaran-pembelian/total-pendapatan', [LaporanPembayaranPembelianController::class, 'getTotalPendapatan'])->name('laporan_pembayaranpembelian.getTotalPendapatan');
 
     Route::get('/laporan_pembayaranpenjualan', [LaporanPembayaranPenjualanController::class, 'index'])->name('laporan_pembayaranpenjualan.index');
     Route::post('/laporan_pembayaranpenjualan/refresh', [LaporanPembayaranPenjualanController::class, 'refresh'])->name('laporan_pembayaranpenjualan.refresh');
     Route::get('/laporan_pembayaranpenjualan/data', [LaporanPembayaranPenjualanController::class, 'data'])->name('laporan_pembayaranpenjualan.data');
     Route::get('/laporan_pembayaranpenjualan/exportpdf', [LaporanPembayaranPenjualanController::class, 'exportpdf'])->name('laporan_pembayaranpenjualan.exportpdf');
+    Route::get('laporan-pembayaran-penjualan/total-pendapatan', [LaporanPembayaranPenjualanController::class, 'getTotalPendapatan'])->name('laporan_pembayaranpenjualan.getTotalPendapatan');
 
     Route::get('/laporan_persediaan', [LaporanPersediaanController::class, 'index'])->name('laporan_persediaan.index');
     Route::get('/laporan_persediaan/data', [LaporanPersediaanController::class, 'data'])->name('laporan_persediaan.data');

@@ -95,7 +95,6 @@ class PembelianController extends Controller
 
     public function store(Request $request)
     {
-
         $detil = Pembelian::find($request->id_pembelian);
         // $detil->kode_pembelian = $request->kode_pembelian;
         $detil->total_item = $request->total_item;

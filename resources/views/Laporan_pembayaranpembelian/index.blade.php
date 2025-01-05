@@ -30,6 +30,15 @@
                             <input type="text" name="tanggalakhir" id="tanggalakhir" class="form-control datepicker"
                                 value="{{ request('tanggalakhir', date('Y-m-d')) }}" placeholder="YYYY-MM-DD">
                         </div>
+                        <div class="form-group ">
+                            <label for="status">Status Pembayaran</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Semua</option>
+                                <option value="lunas" {{ request('status') == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                                <option value="belum lunas" {{ request('status') == 'belum lunas' ? 'selected' : '' }}>Belum
+                                    Lunas</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary">Tampilkan</button>
                     </form>
 
@@ -39,6 +48,7 @@
                             value="{{ request('tanggalawal', date('Y-m-01')) }}">
                         <input type="hidden" name="tanggalakhir" id="pdf-tanggalakhir"
                             value="{{ request('tanggalakhir', date('Y-m-d')) }}">
+                        <input type="hidden" name="status" id="pdf-status" value="{{ request('status', '') }}">
                         <button type="submit" class="btn btn-info btn-flat btn-xs">
                             <i class="fa fa-download"></i> Download PDF
                         </button>
@@ -59,6 +69,10 @@
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
+                    <div class="text-right">
+                        {{-- <h3>Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3> --}}
+                        <h3 id="total-pendapatan">Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,6 +98,7 @@
                     data: function(d) {
                         d.tanggalawal = $('#tanggalawal').val();
                         d.tanggalakhir = $('#tanggalakhir').val();
+                        d.status = $('#status').val();
                     }
                 },
                 columns: [{
@@ -123,12 +138,36 @@
                 e.preventDefault();
                 const tanggalawal = $('#tanggalawal').val();
                 const tanggalakhir = $('#tanggalakhir').val();
+                const status = $('#status').val();
 
                 $('#pdf-tanggalawal').val(tanggalawal);
                 $('#pdf-tanggalakhir').val(tanggalakhir);
+                $('#pdf-status').val(status);
 
                 table.ajax.reload();
+                $.ajax({
+                    url: '{{ route('laporan_pembayaranpembelian.getTotalPendapatan') }}',
+                    type: 'GET',
+                    data: {
+                        tanggalawal,
+                        tanggalakhir,
+                        status
+                    },
+                    success: function(response) {
+                        $('#total-pendapatan').text(
+                            `Total Pendapatan: Rp. ${response.totalPendapatan}`);
+                    }
+                });
             });
+
+            $('#status').on('change', function() {
+                $('#pdf-status').val($(this).val());
+            });
+
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            })
 
             table2 = $('.table-laporan-detail').DataTable({
                 processing: true,
@@ -159,10 +198,10 @@
             table2.ajax.reload();
         }
 
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
+        // $('.datepicker').datepicker({
+        //     format: 'yyyy-mm-dd',
+        //     autoclose: true
+        // });
         $('#modal-form').validator().on('submit', function(e) {
             if (!e.preventDefault()) {
                 $('#modal-form').modal('show');

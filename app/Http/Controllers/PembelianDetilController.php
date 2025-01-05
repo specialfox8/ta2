@@ -81,6 +81,7 @@ class PembelianDetilController extends Controller
         $detil->id_pembelian = $request->id_pembelian;
         $detil->id_barang = $barang->id_barang;
         $detil->harga_beli = $barang->harga_beli;
+        // $detil->created_at = $request->tgl;
         $detil->jumlah = 1;
         $detil->subtotal = $barang->harga_beli;
         $detil->save();

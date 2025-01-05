@@ -62,6 +62,14 @@
                 <!-- /.box-header -->
                 <div class="box-body ">
 
+                    {{-- <div class="form-group row">
+                        <label for="tgl" class="col-lg-2 control-label">Tanggal</label>
+                        <div class="col-lg-8">
+                            <input type="date" name="tgl" id="tgl" class="form-control"
+                                value="{{ now()->format('Y-m-d') }}" required>
+                        </div>
+                    </div> --}}
+
                     <form class="form-barang">
                         @csrf
                         <div class="form-group row">

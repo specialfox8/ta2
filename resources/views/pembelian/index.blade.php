@@ -74,7 +74,8 @@
                         data: 'diskon'
                     }, {
                         data: 'bayar'
-                    }, {
+                    },
+                    {
                         data: 'tanggal'
                     },
                     {

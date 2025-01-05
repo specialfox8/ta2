@@ -14,19 +14,42 @@ class LaporanPembayaranPenjualanController extends Controller
 
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-        return view('laporan_pembayaranpenjualan.index', compact('tanggalawal', 'tanggalakhir'));
+        $status = $request->get('status', '');
+
+        $penjualan = Penjualan::with('konsumen')
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('id_penjualan', 'desc')
+        // ->get();
+
+        if ($status) {
+            $penjualan->where('status', $status);
+        }
+
+        $penjualan = $penjualan->orderBy('id_penjualan', 'desc')->get();
+
+        // $totalPendapatan = $penjualan->sum('bayar');
+        $totalPendapatan = $status ? $penjualan->where('status', $status)->sum('bayar') : $penjualan->sum('bayar');
+
+        return view('laporan_pembayaranpenjualan.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
     }
 
     public function data(Request $request)
     {
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
 
         // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
         $penjualan = Penjualan::with('konsumen')
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
-            ->orderBy('id_penjualan', 'desc')
-            ->get();
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('id_penjualan', 'desc')
+        // ->get();
+
+        if ($status) {
+            $penjualan->where('status', $status);
+        }
+
+        $penjualan = $penjualan->orderBy('id_penjualan', 'desc')->get();
 
         return datatables()
             ->of($penjualan)
@@ -96,14 +119,46 @@ class LaporanPembayaranPenjualanController extends Controller
     {
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
 
         $penjualan = Penjualan::with(['konsumen', 'detil.barang'])
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('created_at', 'asc')
+        // ->get();
 
-        $pdf = Pdf::loadView('laporan_pembayaranpenjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir'));
+        if ($request->get('status')) {
+            $penjualan->where('status', $request->get('status'));
+        }
+
+        $penjualan = $penjualan->orderBy('created_at', 'asc')->get();
+
+        // $totalPendapatan = $penjualan->sum('bayar');
+        // $totalPendapatan = $request->get('status') ? $penjualan->where('status', $request->get('status'))->sum('bayar') : $penjualan->sum('bayar');
+        $totalPendapatan = $status ? $penjualan->where('status', $status)->sum('bayar') : $penjualan->sum('bayar');
+
+        foreach ($penjualan as $item) {
+            $item->bayar = (float) $item->bayar;
+        }
+
+        $pdf = Pdf::loadView('laporan_pembayaranpenjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
 
         return $pdf->download('laporan_pembayaranpenjualan_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
+    }
+
+    public function getTotalPendapatan(Request $request)
+    {
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
+
+        $penjualan = Penjualan::whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+
+        if ($status) {
+            $penjualan->where('status', $status);
+        }
+
+        $totalPendapatan = $penjualan->sum('bayar');
+
+        return response()->json(['totalPendapatan' => format_uang($totalPendapatan)]);
     }
 }
