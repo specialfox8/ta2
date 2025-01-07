@@ -44,7 +44,7 @@
             </tr>
             <tr>
                 <th>Tanggal Penjualan</th>
-                <td>{{ tanggal_indonesia($item->created_at, false) }}</td>
+                <td>{{ tanggal_indonesia($item->tanggal, false) }}</td>
             </tr>
             <tr>
                 <th>Supplier</th>

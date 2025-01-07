@@ -61,7 +61,7 @@
                         </thead>
                     </table>
                     <div class="text-right">
-                        <h3>Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3>
+                        <h3 id="total-pendapatan">Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3>
                     </div>
                 </div>
             </div>
@@ -107,8 +107,9 @@
                         data: 'diskon'
                     }, {
                         data: 'bayar'
-                    }, {
-                        data: 'tanggalbli'
+                    },
+                    {
+                        data: 'tanggal'
                     },
                     {
                         data: 'aksi',
@@ -128,6 +129,18 @@
                 $('#pdf-tanggalakhir').val(tanggalakhir);
 
                 table.ajax.reload();
+                $.ajax({
+                    url: '{{ route('laporan_pembelian.getTotalPendapatan') }}',
+                    type: 'GET',
+                    data: {
+                        tanggalawal,
+                        tanggalakhir,
+                    },
+                    success: function(response) {
+                        $('#total-pendapatan').text(
+                            `Total Pendapatan: Rp. ${response.totalPendapatan}`);
+                    }
+                });
             });
 
             table2 = $('.table-laporan-detail').DataTable({

@@ -7,6 +7,7 @@ use App\Models\Konsumen;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PenjualanController extends Controller
 {
@@ -19,14 +20,9 @@ class PenjualanController extends Controller
     public function data()
     {
         $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
-        // $detil
-        //     = PenjualanDetil::with('barang')
-        //     ->where('id_penjualan', $id)
-        //     ->get();
 
         return datatables()
             ->of($penjualan)
-            // ->of($detil)
             ->addIndexColumn()
             ->addColumn('total_item', function ($penjualan) {
                 return format_uang($penjualan->total_item);
@@ -38,14 +34,11 @@ class PenjualanController extends Controller
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
             ->addColumn('tanggal', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
+                return tanggal_indonesia($penjualan->tanggal, false);
             })
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
             })
-            // ->addColumn('nama_barang', function ($detil) {
-            //     return $detil->barang->nama_barang;
-            // })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
             })
@@ -61,32 +54,34 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create($id)
-    {
-        $tahun = date('y');
-        $bulan = date('m');
-        $hari = date('d');
 
-        $lastKode = Penjualan::whereYear('created_at', date('Y'))
-            ->whereMonth('created_at', date('m'))
+    public function createWithDate(Request $request)
+    {
+        Log::info('createWithDate method called', $request->all());
+        $validated = $request->validate([
+            'id_konsumen' => 'required|exists:konsumen,id_konsumen',
+            'tanggal' => 'required|date',
+        ]);
+
+        $tahun = date('y', strtotime($validated['tanggal']));
+        $bulan = date('m', strtotime($validated['tanggal']));
+        $hari = date('d', strtotime($validated['tanggal']));
+
+        $lastKode = Penjualan::whereDate('tanggal', $validated['tanggal'])
             ->orderBy('id_penjualan', 'desc')
             ->first();
 
-        $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
-        // $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
-        $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_penjualan, -3)) + 1);
+        $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
         $kode_penjualan = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
 
         $detil = new Penjualan();
-        $detil->id_konsumen = $id;
+        $detil->id_konsumen = $validated['id_konsumen'];
         $detil->kode_penjualan = $kode_penjualan;
         $detil->total_item = 0;
         $detil->total_harga = 0;
         $detil->diskon = 0;
         $detil->bayar = 0;
+        $detil->tanggal = $validated['tanggal'];
         $detil->save();
 
         session(['id_penjualan' => $detil->id_penjualan]);
@@ -94,6 +89,40 @@ class PenjualanController extends Controller
 
         return redirect()->route('penjualan_detail.index');
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    // public function create($id)
+    // {
+    //     $tahun = date('y');
+    //     $bulan = date('m');
+    //     $hari = date('d');
+
+    //     $lastKode = Penjualan::whereYear('created_at', date('Y'))
+    //         ->whereMonth('created_at', date('m'))
+    //         ->orderBy('id_penjualan', 'desc')
+    //         ->first();
+
+    //     $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
+    //     // $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
+    //     $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_penjualan, -3)) + 1);
+    //     $kode_penjualan = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
+    //     $detil = new Penjualan();
+    //     $detil->id_konsumen = $id;
+    //     $detil->kode_penjualan = $kode_penjualan;
+    //     $detil->total_item = 0;
+    //     $detil->total_harga = 0;
+    //     $detil->diskon = 0;
+    //     $detil->bayar = 0;
+    //     $detil->save();
+
+    //     session(['id_penjualan' => $detil->id_penjualan]);
+    //     session(['id_konsumen' => $detil->id_konsumen]);
+
+    //     return redirect()->route('penjualan_detail.index');
+    // }
 
     public function store(Request $request)
     {

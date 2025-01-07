@@ -18,12 +18,15 @@ class LaporanPenjualanController extends Controller
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
         $penjualan = Penjualan::with('konsumen')
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
             ->orderBy('id_penjualan', 'desc')
             ->get();
 
-
         $totalPendapatan = $penjualan->sum('bayar');
+        if ($request->ajax()) {
+            return response()->json(['totalPendapatan' => $totalPendapatan]);
+        }
+
 
         return view('laporan_penjualan.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan'));
     }
@@ -35,7 +38,7 @@ class LaporanPenjualanController extends Controller
 
         // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
         $penjualan = Penjualan::with('konsumen')
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
             ->orderBy('id_penjualan', 'desc')
             ->get();
 
@@ -51,11 +54,8 @@ class LaporanPenjualanController extends Controller
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
-            ->addColumn('tanggalbli', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
-            })
             ->addColumn('tanggal', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
+                return tanggal_indonesia($penjualan->tanggal, false);
             })
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
@@ -110,8 +110,8 @@ class LaporanPenjualanController extends Controller
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
 
         $penjualan = Penjualan::with(['konsumen', 'detil.barang'])
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
-            ->orderBy('created_at', 'asc')
+            ->whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
+            ->orderBy('tanggal', 'asc')
             ->get();
 
         $totalPendapatan = $penjualan->sum('bayar');
@@ -123,5 +123,17 @@ class LaporanPenjualanController extends Controller
         $pdf = FacadePdf::loadView('laporan_penjualan.pdf', compact('penjualan', 'tanggalawal', 'tanggalakhir', 'totalPendapatan'));
 
         return $pdf->download('laporan_penjualan_' . $tanggalawal . '_to_' . $tanggalakhir . '.pdf');
+    }
+
+    public function getTotalPendapatan(Request $request)
+    {
+        $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
+        $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+
+        $pembelian = Penjualan::whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+
+        $totalPendapatan = $pembelian->sum('bayar');
+
+        return response()->json(['totalPendapatan' => format_uang($totalPendapatan)]);
     }
 }

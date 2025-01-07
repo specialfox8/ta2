@@ -7,6 +7,7 @@ use App\Models\Pembelian;
 use App\Models\PembelianDetil;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PembelianController extends Controller
 {
@@ -36,7 +37,7 @@ class PembelianController extends Controller
                 return 'Rp.' . format_uang($pembelian->bayar);
             })
             ->addColumn('tanggal', function ($pembelian) {
-                return tanggal_indonesia($pembelian->created_at, false);
+                return tanggal_indonesia($pembelian->tanggal, false);
             })
             ->addColumn('supplier', function ($pembelian) {
                 return $pembelian->supplier->nama;
@@ -59,32 +60,34 @@ class PembelianController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($id)
+
+    public function createWithDate(Request $request)
     {
-        $tahun = date('y');
-        $bulan = date('m');
-        $hari = date('d');
+        Log::info('createWithDate method called', $request->all());
+        $validated = $request->validate([
+            'id_supplier' => 'required|exists:supplier,id_supplier',
+            'tanggal' => 'required|date',
+        ]);
 
+        $tahun = date('y', strtotime($validated['tanggal']));
+        $bulan = date('m', strtotime($validated['tanggal']));
+        $hari = date('d', strtotime($validated['tanggal']));
 
-        $lastKode = Pembelian::whereYear('created_at', date('Y'))
-            ->whereMonth('created_at', date('m'))
+        $lastKode = Pembelian::whereDate('tanggal', $validated['tanggal'])
             ->orderBy('id_pembelian', 'desc')
             ->first();
 
-        $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
-        $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_pembelian, -3)) + 1);
-        // $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
+        $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
         $kode_pembelian = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
 
-
-
         $detil = new Pembelian();
-        $detil->id_supplier = $id;
+        $detil->id_supplier = $validated['id_supplier'];
         $detil->kode_pembelian = $kode_pembelian;
         $detil->total_item = 0;
         $detil->total_harga = 0;
         $detil->diskon = 0;
         $detil->bayar = 0;
+        $detil->tanggal = $validated['tanggal'];
         $detil->save();
 
         session(['id_pembelian' => $detil->id_pembelian]);
@@ -92,6 +95,42 @@ class PembelianController extends Controller
 
         return redirect()->route('pembelian_detail.index');
     }
+
+    // public function create($id)
+    // {
+
+
+    //     $tahun = date('y');
+    //     $bulan = date('m');
+    //     $hari = date('d');
+
+
+    //     $lastKode = Pembelian::whereYear('created_at', date('Y'))
+    //         ->whereMonth('created_at', date('m'))
+    //         ->orderBy('id_pembelian', 'desc')
+    //         ->first();
+
+    //     $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
+    //     $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_pembelian, -3)) + 1);
+    //     // $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
+    //     $kode_pembelian = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
+
+
+    //     $detil = new Pembelian();
+    //     $detil->id_supplier = $id;
+    //     $detil->kode_pembelian = $kode_pembelian;
+    //     $detil->total_item = 0;
+    //     $detil->total_harga = 0;
+    //     $detil->diskon = 0;
+    //     $detil->bayar = 0;
+    //     $detil->save();
+
+    //     session(['id_pembelian' => $detil->id_pembelian]);
+    //     session(['id_supplier' => $detil->id_supplier]);
+
+    //     return redirect()->route('pembelian_detail.index');
+    // }
 
     public function store(Request $request)
     {

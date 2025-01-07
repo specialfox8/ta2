@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
     Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
+    Route::post('/pembelian/create-with-date', [PembelianController::class, 'createWithDate'])->name('pembelian.createWithDate');
     Route::resource('/pembelian', PembelianController::class)
         ->except('create');
 
@@ -64,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
     Route::get('/penjualan/{id}/create', [PenjualanController::class, 'create'])->name('penjualan.create');
+    Route::post('/penjualan/create-with-date', [PenjualanController::class, 'createWithDate'])->name('penjualan.createWithDate');
     Route::resource('/penjualan', PenjualanController::class)
         ->except('create');
 
@@ -77,6 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_penjualan/refresh', [LaporanPenjualanController::class, 'refresh'])->name('laporan_penjualan.refresh');
     Route::get('/laporan_penjualan/data', [LaporanPenjualanController::class, 'data'])->name('laporan_penjualan.data');
     Route::get('/laporan_penjualan/exportpdf', [LaporanPenjualanController::class, 'exportpdf'])->name('laporan_penjualan.exportpdf');
+    Route::get('laporan-penjualan/total-pendapatan', [LaporanPenjualanController::class, 'getTotalPendapatan'])->name('laporan_penjualan.getTotalPendapatan');
 
 
 
@@ -84,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/laporan_pembelian/refresh', [LaporanPembelianController::class, 'refresh'])->name('laporan_pembelian.refresh');
     Route::get('/laporan_pembelian/data', [LaporanPembelianController::class, 'data'])->name('laporan_pembelian.data');
     Route::get('/laporan_pembelian/exportpdf', [LaporanPembelianController::class, 'exportpdf'])->name('laporan_pembelian.exportpdf');
+    Route::get('laporan-pembelian/total-pendapatan', [LaporanPembelianController::class, 'getTotalPendapatan'])->name('laporan_pembelian.getTotalPendapatan');
 
 
     // Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
