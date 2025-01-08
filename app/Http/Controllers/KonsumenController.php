@@ -55,7 +55,21 @@ class KonsumenController extends Controller
     public function store(Request $request)
     {
 
-        $konsumen = Konsumen::create($request->all());
+        // $konsumen = Konsumen::create($request->all());
+
+        // return response()->json('Data Berhasil Disimpan', 200);
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'nullable|string',
+            'telepon' => 'required|string|regex:/^\d{10,15}$/',
+        ]);
+
+        Konsumen::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'telepon' => $request->telepon,
+        ]);
 
         return response()->json('Data Berhasil Disimpan', 200);
     }

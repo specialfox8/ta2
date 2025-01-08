@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_konsumen');
             $table->string('nama');
             $table->string('alamat');
-            $table->integer('telepon');
+            $table->string('telepon');
             $table->timestamps();
         });
     }

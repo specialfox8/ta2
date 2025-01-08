@@ -48,7 +48,20 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $supplier = Supplier::create($request->all());
+        // $supplier = Supplier::create($request->all());
+
+        // return response()->json('Data Berhasil Disimpan', 200);
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'nullable|string',
+            'telepon' => 'required|string|regex:/^\d{10,15}$/',
+        ]);
+
+        Supplier::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'telepon' => $request->telepon,
+        ]);
 
         return response()->json('Data Berhasil Disimpan', 200);
     }

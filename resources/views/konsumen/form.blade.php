@@ -31,6 +31,7 @@
                             <input type="text" name="telepon" id="telepon" class="form-control" required
                                 pattern="^\d{10,15}$"
                                 title="Nomor telepon harus berupa angka dengan panjang antara 10 hingga 15 karakter.">
+
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
