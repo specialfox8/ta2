@@ -28,7 +28,7 @@ class PembayranUtangController extends Controller
                 return 'Rp.' . format_uang($pembelian->bayar);
             })
             ->addColumn('tanggalbli', function ($pembelian) {
-                return tanggal_indonesia($pembelian->created_at, false);
+                return tanggal_indonesia($pembelian->tanggal, false);
             })
             ->addColumn('tanggalbyr', function ($pembelian) {
                 return tanggal_indonesia($pembelian->updated_at, false);

@@ -31,7 +31,7 @@ class PembayaranPiutangController extends Controller
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
             ->addColumn('tanggalbli', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
+                return tanggal_indonesia($penjualan->tanggal, false);
             })
             ->addColumn('tanggalbyr', function ($penjualan) {
                 return tanggal_indonesia($penjualan->updated_at, false);
