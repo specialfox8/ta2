@@ -39,12 +39,19 @@ class LaporanPembayaranPembelianController extends Controller
 
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
+        $status = $request->get('status', '');
 
         // $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
         $pembelian = Pembelian::with('supplier')
-            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
-            ->orderBy('id_pembelian', 'desc')
-            ->get();
+            ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        // ->orderBy('id_pembelian', 'desc')
+        // ->get();
+
+        if ($status) {
+            $pembelian->where('status', $status);
+        }
+
+        $pembelian = $pembelian->orderBy('id_pembelian', 'desc')->get();
 
 
         return datatables()
@@ -145,7 +152,7 @@ class LaporanPembayaranPembelianController extends Controller
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
 
-        $pembelian = Pembelian::whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        $pembelian = Pembelian::whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
 
         if ($status) {
             $pembelian->where('status', $status);

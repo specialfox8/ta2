@@ -70,7 +70,6 @@
                         </thead>
                     </table>
                     <div class="text-right">
-                        {{-- <h3>Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3> --}}
                         <h3 id="total-pendapatan">Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3>
                     </div>
                 </div>
@@ -101,6 +100,7 @@
                         d.status = $('#status').val();
                     }
                 },
+
                 columns: [{
                         data: 'DT_RowIndex',
                         searchable: false,
@@ -145,6 +145,7 @@
                 $('#pdf-status').val(status);
 
                 table.ajax.reload();
+
                 $.ajax({
                     url: '{{ route('laporan_pembayaranpembelian.getTotalPendapatan') }}',
                     type: 'GET',

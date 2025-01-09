@@ -41,6 +41,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Tampilkan</button>
                     </form>
+
                     <form method="get" action="{{ route('laporan_pembayaranpenjualan.exportpdf') }}" class="form-inline"
                         id="form-pdf">
                         <input type="hidden" name="tanggalawal" id="pdf-tanggalawal"
@@ -68,9 +69,6 @@
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
-                    {{-- <div class="text-right">
-                        <h3>Total Pendapatan: Rp. {{ format_uang($totalPendapatan) }}</h3>
-                    </div> --}}
                     <div class="text-right">
                         <h3 id="total-pendapatan">Total Pendapatan: Rp. {{ format_uang($totalPendapatan) }}</h3>
                     </div>
@@ -135,6 +133,7 @@
                     },
                 ]
             });
+
             $('#form-periode').on('submit', function(e) {
                 e.preventDefault();
                 const tanggalawal = $('#tanggalawal').val();

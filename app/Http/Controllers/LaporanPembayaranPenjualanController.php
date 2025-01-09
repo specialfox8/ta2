@@ -151,7 +151,7 @@ class LaporanPembayaranPenjualanController extends Controller
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
 
-        $penjualan = Penjualan::whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
+        $penjualan = Penjualan::whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
 
         if ($status) {
             $penjualan->where('status', $status);
