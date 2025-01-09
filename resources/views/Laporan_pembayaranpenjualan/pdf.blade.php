@@ -35,6 +35,7 @@
     <p>Periode: {{ tanggal_indonesia($tanggalawal, false) }} - {{ tanggal_indonesia($tanggalakhir, false) }}</p>
     <p>Status Pembayaran: {{ $status ?: 'Semua' }}</p>
 
+
     <h3>Total Harga Pendapatan Pembelian: Rp.{{ format_uang($totalPendapatan) }}</h3>
 
     @foreach ($penjualan as $key => $item)
@@ -44,10 +45,16 @@
                 <th>Kode Penjualan</th>
                 <td>{{ $item->kode_penjualan }}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <th>Tanggal Pembayaran</th>
                 <td>{{ tanggal_indonesia($item->updated_at, false) }}</td>
+            </tr> --}}
+
+            <tr>
+                <th>Tanggal Pembayaran</th>
+                <td>{{ $item->status === 'belum lunas' ? '-' : tanggal_indonesia($item->updated_at, false) }}</td>
             </tr>
+
             <tr>
                 <th>konsumen</th>
                 <td>{{ $item->konsumen->nama }}</td>

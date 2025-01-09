@@ -65,6 +65,7 @@
                             <th>Diskon</th>
                             <th>Total Bayar</th>
                             <th>Tanggal Pembayaran</th>
+
                             <th>Status</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>

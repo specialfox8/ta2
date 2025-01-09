@@ -61,9 +61,13 @@ class LaporanPembayaranPenjualanController extends Controller
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
+            // ->addColumn('tanggalbyr', function ($penjualan) {
+            //     return tanggal_indonesia($penjualan->updated_at, false);
+            // })
             ->addColumn('tanggalbyr', function ($penjualan) {
-                return tanggal_indonesia($penjualan->updated_at, false);
+                return $penjualan->status === 'belum lunas' ? '' : tanggal_indonesia($penjualan->updated_at, false);
             })
+
             ->addColumn('konsumen', function ($penjualan) {
                 return $penjualan->konsumen->nama;
             })

@@ -43,9 +43,13 @@
                 <th>Kode Pembelian</th>
                 <td>{{ $item->kode_pembelian }}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <th>Tanggal Pembayaran</th>
                 <td>{{ tanggal_indonesia($item->updated_at, false) }}</td>
+            </tr> --}}
+            <tr>
+                <th>Tanggal Pembayaran</th>
+                <td>{{ $item->status === 'belum lunas' ? '-' : tanggal_indonesia($item->updated_at, false) }}</td>
             </tr>
             <tr>
                 <th>Supplier</th>

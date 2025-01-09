@@ -30,8 +30,11 @@ class PembayranUtangController extends Controller
             ->addColumn('tanggalbli', function ($pembelian) {
                 return tanggal_indonesia($pembelian->tanggal, false);
             })
-            ->addColumn('tanggalbyr', function ($pembelian) {
-                return tanggal_indonesia($pembelian->updated_at, false);
+            // ->addColumn('tanggalbyr', function ($pembelian) {
+            //     return tanggal_indonesia($pembelian->updated_at, false);
+            // })
+            ->addColumn('tanggalbyr', function ($penjualan) {
+                return $penjualan->status === 'belum lunas' ? '' : tanggal_indonesia($penjualan->updated_at, false);
             })
             ->addColumn('supplier', function ($pembelian) {
                 return $pembelian->supplier->nama;
