@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Laporan Pembelian
+    Laporan Pendapatan Penghasilan Seluruh Transaksi
 @endsection
 
 @push('css')
@@ -11,15 +11,16 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporan Pembelian</li>
+    <li class="active">Laporan Pendapatan Penghasilan Seluruh Transaksi</li>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <form id="form-periode" method="get" action="{{ route('laporan_pembelian.index') }}" class="form-inline">
+                    <form id="form-periode" method="get" action="{{ route('laporan_penghasilan.index') }}"
+                        class="form-inline">
                         <div class="form-group">
                             <label for="tanggalawal">Tanggal Awal</label>
                             <input type="text" name="tanggalawal" id="tanggalawal" class="form-control datepicker"
@@ -30,10 +31,11 @@
                             <input type="text" name="tanggalakhir" id="tanggalakhir" class="form-control datepicker"
                                 value="{{ request('tanggalakhir', date('Y-m-d')) }}" placeholder="YYYY-MM-DD">
                         </div>
+
                         <button type="submit" class="btn btn-primary">Tampilkan</button>
                     </form>
 
-                    <form method="get" action="{{ route('laporan_pembelian.exportpdf') }}" class="form-inline"
+                    <form method="get" action="{{ route('laporan_penghasilan.exportpdf') }}" class="form-inline"
                         id="form-pdf">
                         <input type="hidden" name="tanggalawal" id="pdf-tanggalawal"
                             value="{{ request('tanggalawal', date('Y-m-01')) }}">
@@ -44,78 +46,65 @@
                         </button>
                     </form>
                 </div>
+
+                <!-- Tabel laporan -->
                 <div class="box-body table-responsive">
-                    <table class="table table-striped table-bordered table-laporan-pembelian">
+                    <table class="table table-striped table-bordered table-laporan-penghasilan">
+
                         <thead>
-                            <th width="5%">No</th>
-                            <th>Kode Pembelian</th>
-                            <th>Nama supplier</th>
-                            <th>Total Harga</th>
-                            <th>Diskon</th>
-                            <th>Total Bayar</th>
-                            <th>Tanggal </th>
-                            <th width="15%"><i class="fa fa-cog"></i></th>
+                            <tr>
+                                <th>Pembelian</th>
+                                <th>Penjualan</th>
+                                <th>Pendapatan Penghasilan</th>
+                            </tr>
                         </thead>
                     </table>
-                    <div class="text-right">
-                        <h3 id="total-pendapatan">Total Pengeluaran: Rp. {{ format_uang($totalPendapatan) }}</h3>
-                    </div>
+                    {{-- <div class="text-right">
+                        <h3 id="total-pendapatan">Total Pendapatan Penghasilan: Rp. {{ format_uang($totalPendapatan) }}
+                        </h3>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </div>
 @endsection
 
-@includeIf('laporan_pembelian.form')
-@includeIf('laporan_pembelian.detail')
-
-
 @push('scripts')
     <script src="{{ asset('AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}">
     </script>
-    <script>
-        let table, table2;
+    < <script>
+        let table;
 
         $(function() {
-            table = $('.table-laporan-pembelian').DataTable({
+            var table = $('.table-laporan-penghasilan').DataTable({
                 processing: true,
-                autoWidth: false,
+                serverSide: true,
                 ajax: {
-                    url: '{{ route('laporan_pembelian.data') }}',
+                    url: '{{ route('laporan_penghasilan.data') }}',
                     data: function(d) {
                         d.tanggalawal = $('#tanggalawal').val();
                         d.tanggalakhir = $('#tanggalakhir').val();
-                    }
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        searchable: false,
-                        sortable: false
                     },
-                    {
-                        data: 'kode_pembelian'
-                    },
-                    {
-                        data: 'supplier'
-                    },
-                    {
-                        data: 'total_harga'
-                    }, {
-                        data: 'diskon'
-                    }, {
-                        data: 'bayar'
-                    },
-                    {
-                        data: 'tanggal'
-                    },
-                    {
-                        data: 'aksi',
-                        searchable: false,
-                        sortable: false
-                    },
-                ]
 
+                },
+                columns: [
+
+                    {
+                        data: 'pembelian'
+                    },
+                    {
+                        data: 'penjualan'
+                    },
+                    {
+                        data: 'pendapatan'
+                    }
+                ]
             });
+            $('#form-periode').on('submit', function(e) {
+                e.preventDefault();
+                table.ajax.reload();
+            });
+
 
             $('#form-periode').on('submit', function(e) {
                 e.preventDefault();
@@ -139,35 +128,14 @@
                     }
                 });
             });
-
-            table2 = $('.table-laporan-detail').DataTable({
-                processing: true,
-                bSort: false,
-                dom: 'Brt',
-                columns: [{
-                    data: 'DT_RowIndex',
-                    searchable: false,
-                    sortable: false
-                }, {
-                    data: 'kode_barang'
-                }, {
-                    data: 'nama_barang'
-                }, {
-                    data: 'harga'
-                }, {
-                    data: 'jumlah'
-                }, {
-                    data: 'subtotal'
-                }, ]
-            });
         });
 
 
-        function showLaporanPembelian(url) {
-            $('#modal-laporan-pembelian').modal('show');
-            table2.ajax.url(url);
-            table2.ajax.reload();
-        }
+        // function showLaporanPembelian(url) {
+        //     $('#modal-laporan-pembelian').modal('show');
+        //     table2.ajax.url(url);
+        //     table2.ajax.reload();
+        // }
 
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',

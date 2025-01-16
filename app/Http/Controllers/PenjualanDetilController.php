@@ -41,16 +41,13 @@ class PenjualanDetilController extends Controller
             $row['nama_barang'] = $item->barang['nama_barang'];
             $row['harga_jual'] = 'Rp. ' . format_uang($item->harga_jual);
             $row['jumlah'] =
-                '<input type="number" class="form-control input-sm editjumlah" data-id="' . $item->id_penjualan_detil . '" value="' . $item->jumlah . '">';
+                '<input type="number" class="form-control input-sm editjumlah" data-id="' . $item->id_penjualan_detil . '" data-stok="' . $item->barang->stok . '" value="' . $item->jumlah . '">';
             $row['subtotal'] = 'Rp. ' . format_uang($item->subtotal);
             $row['aksi'] =
                 '<div class="btn-group">
                 <button onclick="deleteData(`' . route('penjualan_detail.destroy', $item->id_penjualan_detil) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>';
 
-            // $row['aksi'] = '<div class="btn-group">
-            //     <button onclick="deleteData()" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
-            //     </div>';
             $data[] = $row;
 
             $total += $item->harga_jual * $item->jumlah;
@@ -95,10 +92,19 @@ class PenjualanDetilController extends Controller
     public function update(Request $request, $id)
     {
         $detil = PenjualanDetil::find($id);
+        $barang = Barang::find($detil->id_barang);
+
+        if ($request->jumlah > $barang->jumlah) {
+            return response()->json(['error' => 'Jumlah tidak boleh melebihi stok barang'], 400);
+        }
+
         $detil->jumlah = $request->jumlah;
         $detil->subtotal = $detil->harga_jual * $request->jumlah;
         $detil->update();
+
+        return response()->json('Data berhasil diperbarui', 200);
     }
+
 
     public function destroy($id)
     {

@@ -9,9 +9,6 @@ use App\Models\Kategori;
 
 class KategoriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('kategori.index');
@@ -36,17 +33,11 @@ class KategoriController extends Controller
             ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $katergori = new Kategori();
@@ -56,9 +47,6 @@ class KategoriController extends Controller
         return response()->json('Data Berhasil Disimpan', 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $kategori = Kategori::find($id);
@@ -66,17 +54,11 @@ class KategoriController extends Controller
         return response()->json($kategori);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $katergori = Kategori::find($id);
@@ -86,9 +68,6 @@ class KategoriController extends Controller
         return response()->json('Data Berhasil Disimpan', 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $kategori = Kategori::find($id);

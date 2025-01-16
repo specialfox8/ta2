@@ -1,27 +1,11 @@
-<!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
     <section class="sidebar">
-        <!-- Sidebar user panel -->
-        {{-- <div class="user-panel">
-            <div class="pull-left image">
-                <img src="{{ asset('Adminlte-2/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-            </div>
-            <div class="pull-left info">
-                <span class="hidden-xs">{{ auth()->user()->name }}</span>
-            </div>
-        </div> --}}
-
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li>
                 <a href="{{ route('dashboard') }}">
                     <i class="fa fa-home" aria-hidden="true"></i></i> <span>Home</span>
                 </a>
             </li>
-
-            {{-- Data Master --}}
-            {{-- <li class="header">Data Master</li> --}}
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-archive" aria-hidden="true"></i></i> <span>Data Master</span>
@@ -33,15 +17,13 @@
                     <li class="active"><a href="{{ route('kategori.index') }}"><i
                                 class="fa fa-circle-o"></i>kategori</a></i> </li>
                     <li class="active"><a href="{{ route('barang.index') }}">
-                            <i class="fa fa-circle-o"></i>Persediaan</a></i></li>
+                            <i class="fa fa-circle-o"></i>Barang</a></i></li>
                     <li class="active"><a href="{{ route('supplier.index') }}"><i
                                 class="fa fa-circle-o"></i>Supplier</a></li>
                     <li class="active"><a href="{{ route('konsumen.index') }}"><i
                                 class="fa fa-circle-o"></i>Konsumen</a></li>
                 </ul>
             </li>
-            {{-- Data Transaksi --}}
-            {{-- <li class="header">Data transaksi</li> --}}
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-usd" aria-hidden="true"></i></i> <span>Data transaksi</span>
@@ -63,7 +45,6 @@
 
                 </ul>
             </li>
-            {{-- Laporan --}}
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-file" aria-hidden="true"></i></i> <span>Laporan</span>
@@ -81,12 +62,11 @@
                     <li class="active"><a href="{{ route('laporan_pembayaranpenjualan.index') }}"><i
                                 class="fa fa-circle-o"></i>Laporan Pembayaran Piutang</a>
                     </li>
-                    <li class="active"><a href="{{ route('laporan_persediaan.index') }}"><i
-                                class="fa fa-circle-o"></i>Laporan Persediaan Barang</a>
+                    <li class="active"><a href="{{ route('laporan_penghasilan.index') }}"><i
+                                class="fa fa-circle-o"></i>Laporan Pendapatan</a>
                     </li>
                 </ul>
             </li>
         </ul>
     </section>
-    <!-- /.sidebar -->
 </aside>

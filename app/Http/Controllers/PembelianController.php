@@ -56,11 +56,6 @@ class PembelianController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-
     public function createWithDate(Request $request)
     {
         Log::info('createWithDate method called', $request->all());
@@ -95,42 +90,6 @@ class PembelianController extends Controller
 
         return redirect()->route('pembelian_detail.index');
     }
-
-    // public function create($id)
-    // {
-
-
-    //     $tahun = date('y');
-    //     $bulan = date('m');
-    //     $hari = date('d');
-
-
-    //     $lastKode = Pembelian::whereYear('created_at', date('Y'))
-    //         ->whereMonth('created_at', date('m'))
-    //         ->orderBy('id_pembelian', 'desc')
-    //         ->first();
-
-    //     $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
-    //     $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_pembelian, -3)) + 1);
-    //     // $urut = $lastKode ? intval(substr($lastKode->kode_pembelian, -3)) + 1 : 1;
-    //     $kode_pembelian = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
-
-
-
-    //     $detil = new Pembelian();
-    //     $detil->id_supplier = $id;
-    //     $detil->kode_pembelian = $kode_pembelian;
-    //     $detil->total_item = 0;
-    //     $detil->total_harga = 0;
-    //     $detil->diskon = 0;
-    //     $detil->bayar = 0;
-    //     $detil->save();
-
-    //     session(['id_pembelian' => $detil->id_pembelian]);
-    //     session(['id_supplier' => $detil->id_supplier]);
-
-    //     return redirect()->route('pembelian_detail.index');
-    // }
 
     public function store(Request $request)
     {

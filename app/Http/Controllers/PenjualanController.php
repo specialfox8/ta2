@@ -90,40 +90,6 @@ class PenjualanController extends Controller
         return redirect()->route('penjualan_detail.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create($id)
-    // {
-    //     $tahun = date('y');
-    //     $bulan = date('m');
-    //     $hari = date('d');
-
-    //     $lastKode = Penjualan::whereYear('created_at', date('Y'))
-    //         ->whereMonth('created_at', date('m'))
-    //         ->orderBy('id_penjualan', 'desc')
-    //         ->first();
-
-    //     $lastDate = $lastKode ? $lastKode->created_at->format('d') : null;
-    //     // $urut = $lastKode ? intval(substr($lastKode->kode_penjualan, -3)) + 1 : 1;
-    //     $urut = ($lastDate != $hari) ? 1 : (intval(substr($lastKode->kode_penjualan, -3)) + 1);
-    //     $kode_penjualan = $tahun . $bulan . $hari . str_pad($urut, 3, '0', STR_PAD_LEFT);
-
-    //     $detil = new Penjualan();
-    //     $detil->id_konsumen = $id;
-    //     $detil->kode_penjualan = $kode_penjualan;
-    //     $detil->total_item = 0;
-    //     $detil->total_harga = 0;
-    //     $detil->diskon = 0;
-    //     $detil->bayar = 0;
-    //     $detil->save();
-
-    //     session(['id_penjualan' => $detil->id_penjualan]);
-    //     session(['id_konsumen' => $detil->id_konsumen]);
-
-    //     return redirect()->route('penjualan_detail.index');
-    // }
-
     public function store(Request $request)
     {
         $penjualan = Penjualan::find($request->id_penjualan);

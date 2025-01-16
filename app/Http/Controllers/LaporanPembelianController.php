@@ -34,8 +34,6 @@ class LaporanPembelianController extends Controller
     {
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-
-        // $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
         $pembelian = Pembelian::with('supplier')
             ->whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
             ->orderBy('id_pembelian', 'desc')

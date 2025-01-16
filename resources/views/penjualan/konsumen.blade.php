@@ -2,7 +2,6 @@
     <div class="modal-dialog" role="document">
         <form action="{{ route('penjualan.createWithDate') }}" method="post" class="form-horizontal">
             @csrf
-            {{-- <form action="" method="post" class="form-horizontal"> --}}
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -25,13 +24,6 @@
                                     <td>{{ $item->nama }}</td>
                                     <td>{{ $item->alamat }}</td>
                                     <td>{{ $item->telepon }}</td>
-                                    {{-- <td>
-                                        <a href="{{ route('penjualan.create', $item->id_konsumen) }}"
-                                            class="btn btn-primary btn-xs btn-flat">
-                                            <i class="fa fa-check-circle"></i>
-                                            Pilih
-                                        </a>
-                                    </td> --}}
                                     <td>
                                         <input type="radio" name="id_konsumen" value="{{ $item->id_konsumen }}"
                                             required>
@@ -46,7 +38,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Lanjut</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                 </div>
             </div>

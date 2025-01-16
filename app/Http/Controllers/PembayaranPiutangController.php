@@ -33,9 +33,6 @@ class PembayaranPiutangController extends Controller
             ->addColumn('tanggalbli', function ($penjualan) {
                 return tanggal_indonesia($penjualan->tanggal, false);
             })
-            // ->addColumn('tanggalbyr', function ($penjualan) {
-            //     return tanggal_indonesia($penjualan->updated_at, false);
-            // })
             ->addColumn('tanggalbyr', function ($penjualan) {
                 return $penjualan->status === 'belum lunas' ? '' : tanggal_indonesia($penjualan->updated_at, false);
             })

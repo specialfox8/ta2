@@ -6,6 +6,7 @@ use App\Http\Controllers\KonsumenController;
 use App\Http\Controllers\LaporanPembayaranPembelianController;
 use App\Http\Controllers\LaporanPembayaranPenjualanController;
 use App\Http\Controllers\LaporanPembelianController;
+use App\Http\Controllers\LaporanPenghasilanController;
 use App\Http\Controllers\LaporanPenjualanController;
 use App\Http\Controllers\LaporanPersediaanController;
 use App\Http\Controllers\PembayaranPiutangController;
@@ -71,7 +72,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/penjualan_detail/{Sid}/data', [PenjualanDetilController::class, 'data'])->name('penjualan_detail.data');
     Route::get('/penjualan_detail/loadform/{diskon}/{total}', [PenjualanDetilController::class, 'loadForm'])->name('penjualan_detail.load.form');
-
     Route::resource('/penjualan_detail', PenjualanDetilController::class)
         ->except('create', 'show', 'edit');
 
@@ -81,17 +81,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/laporan_penjualan/exportpdf', [LaporanPenjualanController::class, 'exportpdf'])->name('laporan_penjualan.exportpdf');
     Route::get('laporan-penjualan/total-pendapatan', [LaporanPenjualanController::class, 'getTotalPendapatan'])->name('laporan_penjualan.getTotalPendapatan');
 
-
-
     Route::get('/laporan_pembelian', [LaporanPembelianController::class, 'index'])->name('laporan_pembelian.index');
     Route::post('/laporan_pembelian/refresh', [LaporanPembelianController::class, 'refresh'])->name('laporan_pembelian.refresh');
     Route::get('/laporan_pembelian/data', [LaporanPembelianController::class, 'data'])->name('laporan_pembelian.data');
     Route::get('/laporan_pembelian/exportpdf', [LaporanPembelianController::class, 'exportpdf'])->name('laporan_pembelian.exportpdf');
     Route::get('laporan-pembelian/total-pendapatan', [LaporanPembelianController::class, 'getTotalPendapatan'])->name('laporan_pembelian.getTotalPendapatan');
 
-
-    // Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
-    // Route::get('/penjualan/{id}/create', [PenjualanController::class, 'create'])->name('penjualan.create');
     Route::get('pembayaran_penjualan/data', [PembayaranPiutangController::class, 'data'])->name('pembayaran_penjualan.data');
     Route::put('pembayaran_penjualan/{id}/status', [PembayaranPiutangController::class, 'updateStatus'])->name('pembayaran_penjualan.updateStatus');
     Route::resource('/pembayaran_penjualan', PembayaranPiutangController::class)
@@ -114,7 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/laporan_pembayaranpenjualan/exportpdf', [LaporanPembayaranPenjualanController::class, 'exportpdf'])->name('laporan_pembayaranpenjualan.exportpdf');
     Route::get('laporan-pembayaran-penjualan/total-pendapatan', [LaporanPembayaranPenjualanController::class, 'getTotalPendapatan'])->name('laporan_pembayaranpenjualan.getTotalPendapatan');
 
-    Route::get('/laporan_persediaan', [LaporanPersediaanController::class, 'index'])->name('laporan_persediaan.index');
-    Route::get('/laporan_persediaan/data', [LaporanPersediaanController::class, 'data'])->name('laporan_persediaan.data');
-    Route::get('/laporan_persediaan/exportpdf', [LaporanPersediaanController::class, 'exportpdf'])->name('laporan_persediaan.exportpdf');
+    Route::get('/laporan-penghasilan', [LaporanPenghasilanController::class, 'index'])->name('laporan_penghasilan.index');
+    Route::get('/laporan-penghasilan/data', [LaporanPenghasilanController::class, 'data'])->name('laporan_penghasilan.data');
+    Route::get('/laporan-penghasilan/exportpdf', [LaporanPenghasilanController::class, 'exportpdf'])->name('laporan_penghasilan.exportpdf');
 });

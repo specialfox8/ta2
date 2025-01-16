@@ -59,7 +59,6 @@
                         </tr>
                     </table>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body ">
 
                     <form class="form-barang-penjualan">
@@ -95,7 +94,6 @@
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="tampil-bayar bg-primary"></div>
-                            {{-- <div class="tampil-terbilang"></div> --}}
                         </div>
                         <div class="col-lg-4">
 
@@ -197,15 +195,17 @@
             $(document).on('input', '.editjumlah', function() {
                 let id = $(this).data('id');
                 let jumlah = parseInt($(this).val());
+                let stok = parseInt($(this).data('stok'));
 
                 if (jumlah < 1) {
                     $(this).val(1);
-                    alert('Jumlah tidak kurang dari 1');
+                    alert('Jumlah tidak boleh kurang dari 1');
                     return;
                 }
-                if (jumlah > 10000) {
-                    $(this).val(10000);
-                    alert('Jumlah tidak boleh dari 10000');
+
+                if (jumlah > stok) {
+                    $(this).val(stok);
+                    alert('Jumlah tidak boleh melebihi stok barang');
                     return;
                 }
 
@@ -222,8 +222,9 @@
                     .fail(errors => {
                         alert('Tidak dapat menyimpan data');
                         return;
-                    })
+                    });
             });
+
 
             $(document).on('input', '#diskon', function() {
                 if ($(this).val() == "") {

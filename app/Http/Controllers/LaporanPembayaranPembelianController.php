@@ -15,22 +15,16 @@ class LaporanPembayaranPembelianController extends Controller
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
-
         $pembelian = Pembelian::with('supplier')
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
-        // ->orderBy('id_pembelian', 'desc')
-        // ->get();
 
         if ($status) {
             $pembelian->where('status', $status);
         }
 
         $pembelian = $pembelian->orderBy('id_pembelian', 'desc')->get();
-
-
         $totalPendapatan = $status ? $pembelian->where('status', $status)->sum('bayar') : $pembelian->sum('bayar');
 
-        // $totalPendapatan = $pembelian->sum('bayar');
         return view('laporan_pembayaranpembelian.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
     }
 
@@ -40,12 +34,8 @@ class LaporanPembayaranPembelianController extends Controller
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
-
-        // $pembelian = Pembelian::orderBy('id_pembelian', 'desc')->get();
         $pembelian = Pembelian::with('supplier')
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
-        // ->orderBy('id_pembelian', 'desc')
-        // ->get();
 
         if ($status) {
             $pembelian->where('status', $status);
@@ -63,9 +53,6 @@ class LaporanPembayaranPembelianController extends Controller
             ->addColumn('bayar', function ($pembelian) {
                 return 'Rp.' . format_uang($pembelian->bayar);
             })
-            // ->addColumn('tanggalbyr', function ($pembelian) {
-            //     return tanggal_indonesia($pembelian->updated_at, false);
-            // })
             ->addColumn('tanggalbyr', function ($penjualan) {
                 return $penjualan->status === 'belum lunas' ? '' : tanggal_indonesia($penjualan->updated_at, false);
             })

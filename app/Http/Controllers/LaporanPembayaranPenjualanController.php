@@ -15,19 +15,14 @@ class LaporanPembayaranPenjualanController extends Controller
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
-
         $penjualan = Penjualan::with('konsumen')
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
-        // ->orderBy('id_penjualan', 'desc')
-        // ->get();
 
         if ($status) {
             $penjualan->where('status', $status);
         }
 
         $penjualan = $penjualan->orderBy('id_penjualan', 'desc')->get();
-
-        // $totalPendapatan = $penjualan->sum('bayar');
         $totalPendapatan = $status ? $penjualan->where('status', $status)->sum('bayar') : $penjualan->sum('bayar');
 
         return view('laporan_pembayaranpenjualan.index', compact('tanggalawal', 'tanggalakhir', 'totalPendapatan', 'status'));
@@ -38,12 +33,8 @@ class LaporanPembayaranPenjualanController extends Controller
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
         $status = $request->get('status', '');
-
-        // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
         $penjualan = Penjualan::with('konsumen')
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
-        // ->orderBy('id_penjualan', 'desc')
-        // ->get();
 
         if ($status) {
             $penjualan->where('status', $status);
@@ -61,9 +52,6 @@ class LaporanPembayaranPenjualanController extends Controller
             ->addColumn('bayar', function ($penjualan) {
                 return 'Rp.' . format_uang($penjualan->bayar);
             })
-            // ->addColumn('tanggalbyr', function ($penjualan) {
-            //     return tanggal_indonesia($penjualan->updated_at, false);
-            // })
             ->addColumn('tanggalbyr', function ($penjualan) {
                 return $penjualan->status === 'belum lunas' ? '' : tanggal_indonesia($penjualan->updated_at, false);
             })
@@ -127,17 +115,12 @@ class LaporanPembayaranPenjualanController extends Controller
 
         $penjualan = Penjualan::with(['konsumen', 'detil.barang'])
             ->whereBetween('created_at', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59']);
-        // ->orderBy('created_at', 'asc')
-        // ->get();
 
         if ($request->get('status')) {
             $penjualan->where('status', $request->get('status'));
         }
 
         $penjualan = $penjualan->orderBy('created_at', 'asc')->get();
-
-        // $totalPendapatan = $penjualan->sum('bayar');
-        // $totalPendapatan = $request->get('status') ? $penjualan->where('status', $request->get('status'))->sum('bayar') : $penjualan->sum('bayar');
         $totalPendapatan = $status ? $penjualan->where('status', $status)->sum('bayar') : $penjualan->sum('bayar');
 
         foreach ($penjualan as $item) {

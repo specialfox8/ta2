@@ -35,8 +35,6 @@ class LaporanPenjualanController extends Controller
     {
         $tanggalawal = $request->get('tanggalawal', date('Y-m-01'));
         $tanggalakhir = $request->get('tanggalakhir', date('Y-m-d'));
-
-        // $penjualan = Penjualan::orderBy('id_penjualan', 'desc')->get();
         $penjualan = Penjualan::with('konsumen')
             ->whereBetween('tanggal', [$tanggalawal . ' 00:00:00', $tanggalakhir . ' 23:59:59'])
             ->orderBy('id_penjualan', 'desc')
